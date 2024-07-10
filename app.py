@@ -9,11 +9,11 @@ st.set_page_config(page_title="Health Assistant",layout="wide",page_icon="ðŸ§‘â€
 
 # Loading the saved models
 # note: we replace backward slashes with forward slashes when we copy path from our system
-diabetes_model = pickle.load(open("diabetes_prediction.sav",'rb'))
+diabetes_model = pickle.load(open("Saved_models/diabetes_prediction.sav",'rb'))
 
-parkinsons_model = pickle.load(open("parkinsons_model.sav",'rb'))
+parkinsons_model = pickle.load(open("Saved_models/parkinsons_model.sav",'rb'))
 
-heart_disease_model = pickle.load(open("heart_prediction_model.sav",'rb'))
+heart_disease_model = pickle.load(open("Saved_models/heart_prediction_model.sav",'rb'))
 
 # Navigation side bar using streamlit-option-menu
 
