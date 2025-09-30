@@ -52,17 +52,14 @@ Parkinson’s Disease Prediction Accuracy: ~87%
 # ▶️ How to Run
 1. Clone this repository:
    ```
-  git clone https://github.comvasuaggarwal0509/multiple-disease-prediction-app.git
-  
-  cd multiple-disease-prediction```
-   
+   git clone https://github.comvasuaggarwal0509/multiple-disease-prediction-app.git
+   cd multiple-disease-prediction```
 2. Install dependencies:
    ```
    pip install -r requirements.txt```
 3. Run Python script
    ```
    streamlit run app.py```
-
 # 🔮 Future Enhancements
 
 Add more diseases to the prediction system.
