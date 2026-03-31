@@ -53,6 +53,8 @@ def disease_page(disease_key):
 def predict_tabular_route():
     """API endpoint for tabular disease prediction."""
     data = request.get_json()
+    if not data:
+        return jsonify({"error": "Invalid request - JSON required"}), 400
     disease_key = data.get("disease_key")
     values = data.get("values", [])
 

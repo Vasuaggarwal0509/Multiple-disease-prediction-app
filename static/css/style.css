@@ -298,6 +298,15 @@ body {
     font-family: 'Courier New', monospace;
 }
 
+/* Confusion Matrix Grid */
+.cm-grid {
+    padding: 0.5rem;
+}
+
+.cm-grid .table {
+    margin-bottom: 0;
+}
+
 /* Best Model Card */
 .best-model-card {
     background: white;

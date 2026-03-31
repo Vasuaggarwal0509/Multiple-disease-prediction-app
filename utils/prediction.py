@@ -73,7 +73,7 @@ def predict_image_all_models(disease_key, image_file):
             "model_name": model_config["name"],
             "available": True,
             "prediction": pred_class,
-            "label": classes[pred_class],
+            "label": classes[pred_class] if pred_class < len(classes) else f"Class {pred_class}",
             "confidence": confidence,
             "probabilities": probabilities,
         })

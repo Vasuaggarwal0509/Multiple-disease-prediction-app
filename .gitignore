@@ -36,10 +36,11 @@ Human_Eye_Disease_Prediction/Trained_Model.keras
 Human_Eye_Disease_Prediction/Trained_Model.h5
 Saved_models/*.sav
 
-# Test images
-test_data/**/*.jpg
-test_data/**/*.jpeg
-test_data/**/*.png
+# Test data
+test_data/
+
+# Research papers
+research_papers/
 
 # Jupyter
 .ipynb_checkpoints/
