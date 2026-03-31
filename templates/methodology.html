@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block title %}Methodology - Disease Prediction System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Methodology</li>
+        </ol>
+    </nav>
+
+    <h1 class="fw-bold mb-2">Research Methodology</h1>
+    <p class="lead text-muted mb-4">
+        Evaluation framework, model architectures, and dataset descriptions.
+    </p>
+
+    <!-- Evaluation Protocol -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-gear"></i> Evaluation Protocol</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h6 class="fw-bold">Image Classification Tasks</h6>
+                    <ul class="method-list">
+                        <li><strong>Models:</strong> ResNet-50, VGG-16, MobileNet V3 (all pretrained on ImageNet)</li>
+                        <li><strong>Training:</strong> Transfer learning with fine-tuning on disease-specific datasets</li>
+                        <li><strong>Input Size:</strong> 224 x 224 x 3 (RGB)</li>
+                        <li><strong>Data Split:</strong> Train / Validation / Test (as provided by dataset or 80/10/10)</li>
+                        <li><strong>Optimizer:</strong> Adam with learning rate scheduling</li>
+                        <li><strong>Loss:</strong> Categorical cross-entropy (multi-class) / Binary cross-entropy (binary)</li>
+                        <li><strong>Augmentation:</strong> Random rotation, flip, zoom, brightness adjustment</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="fw-bold">Tabular Classification Tasks</h6>
+                    <ul class="method-list">
+                        <li><strong>Model:</strong> Support Vector Machine (linear kernel)</li>
+                        <li><strong>Preprocessing:</strong> StandardScaler normalization</li>
+                        <li><strong>Data Split:</strong> 80% train / 20% test (stratified)</li>
+                        <li><strong>Validation:</strong> Single train/test split (small dataset sizes)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Definitions -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-rulers"></i> Metrics Definitions</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>Accuracy</h6>
+                        <p class="small text-muted">Proportion of correct predictions over total predictions. Can be misleading on imbalanced datasets.</p>
+                        <code>TP + TN / (TP + TN + FP + FN)</code>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>Precision</h6>
+                        <p class="small text-muted">Of all positive predictions, how many were correct. High precision = few false alarms.</p>
+                        <code>TP / (TP + FP)</code>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>Recall (Sensitivity)</h6>
+                        <p class="small text-muted">Of all actual positives, how many were detected. Critical in medical diagnosis.</p>
+                        <code>TP / (TP + FN)</code>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>F1 Score</h6>
+                        <p class="small text-muted">Harmonic mean of precision and recall. Balances both concerns.</p>
+                        <code>2 * (P * R) / (P + R)</code>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>AUC-ROC</h6>
+                        <p class="small text-muted">Area Under the Receiver Operating Characteristic Curve. Threshold-independent measure of discriminative ability.</p>
+                        <code>Area under TPR vs FPR curve</code>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="metric-def-card">
+                        <h6>Confusion Matrix</h6>
+                        <p class="small text-muted">Table showing TP, TN, FP, FN counts. Reveals specific failure modes of each model.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CNN Architectures -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-cpu"></i> CNN Architectures Compared</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Architecture</th>
+                            <th>Year</th>
+                            <th>Parameters</th>
+                            <th>ImageNet Top-5</th>
+                            <th>Key Innovation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semibold">VGG-16</td>
+                            <td>2014</td>
+                            <td>138M</td>
+                            <td>92.7%</td>
+                            <td>Deep stacked 3x3 convolutions; simple and uniform architecture</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">ResNet-50</td>
+                            <td>2015</td>
+                            <td>25.6M</td>
+                            <td>93.3%</td>
+                            <td>Residual (skip) connections enabling training of much deeper networks</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">MobileNet V3</td>
+                            <td>2019</td>
+                            <td>5.4M</td>
+                            <td>92.6%</td>
+                            <td>Neural Architecture Search + squeeze-and-excitation; optimized for mobile</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datasets -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-database"></i> Datasets</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Disease</th>
+                            <th>Dataset</th>
+                            <th>Samples</th>
+                            <th>Classes</th>
+                            <th>Type</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, disease in diseases.items() %}
+                        <tr>
+                            <td class="fw-semibold">{{ disease.name }}</td>
+                            <td>{{ disease.dataset.name }}</td>
+                            <td>{{ "{:,}".format(disease.dataset.samples) }}</td>
+                            <td>{{ disease.dataset.classes|length }}</td>
+                            <td>
+                                {% if disease.type == 'image' %}
+                                <span class="badge bg-info">Image</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Tabular</span>
+                                {% endif %}
+                            </td>
+                            <td><a href="{{ disease.dataset.url }}" target="_blank">{{ disease.dataset.source }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- References -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Complete Bibliography</h5>
+        </div>
+        <div class="card-body">
+            {% for disease_key, refs in references.items() %}
+            <h6 class="fw-bold mt-3 text-primary">{{ diseases[disease_key].name if disease_key in diseases else disease_key }}</h6>
+            {% if refs.dataset_paper is defined %}
+            <div class="reference-item">
+                <span class="badge bg-dark me-1">Dataset</span>
+                {{ refs.dataset_paper.authors }} ({{ refs.dataset_paper.year }}).
+                <em>{{ refs.dataset_paper.title }}</em>.
+                {{ refs.dataset_paper.journal }}.
+                {% if refs.dataset_paper.doi is defined and refs.dataset_paper.doi %}
+                DOI: <a href="https://doi.org/{{ refs.dataset_paper.doi }}" target="_blank">{{ refs.dataset_paper.doi }}</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if refs.model_papers is defined %}
+            {% for paper in refs.model_papers %}
+            <div class="reference-item">
+                <span class="badge bg-primary me-1">{{ paper.model }}</span>
+                {{ paper.authors }} ({{ paper.year }}).
+                <em>{{ paper.title }}</em>.
+                {{ paper.journal }}.
+                {% if paper.doi %}
+                DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if refs.related_papers is defined %}
+            {% for paper in refs.related_papers %}
+            <div class="reference-item">
+                <span class="badge bg-success me-1">Related</span>
+                {{ paper.authors }} ({{ paper.year }}).
+                <em>{{ paper.title }}</em>.
+                {{ paper.journal }}.
+                {% if paper.doi %}
+                DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Limitations -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Limitations</h5>
+        </div>
+        <div class="card-body">
+            <ul class="method-list">
+                <li>Tabular datasets are small (195-768 samples), leading to high variance in metrics.</li>
+                <li>No external validation on independent hospital datasets.</li>
+                <li>Transfer learning performance depends on similarity between ImageNet and medical domains.</li>
+                <li>Class imbalance in some datasets (e.g., Pneumonia) may bias results toward majority class.</li>
+                <li>Models trained on specific imaging equipment/protocols may not generalize to other clinical settings.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

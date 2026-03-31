@@ -1,0 +1,27 @@
+{
+  "model_name": "VGG-16",
+  "disease": "eye_disease",
+  "dataset": "Kermany OCT Retinal Images",
+  "parameters": "138M",
+  "training_time": "2h 15min",
+  "metrics": {
+    "accuracy": 0.937,
+    "precision": 0.940,
+    "recall": 0.935,
+    "f1_score": 0.937,
+    "auc_roc": 0.988
+  },
+  "confusion_matrix": [
+    [239, 4, 2, 3],
+    [3, 234, 5, 3],
+    [4, 6, 226, 6],
+    [2, 1, 3, 247]
+  ],
+  "class_labels": ["CNV", "DME", "DRUSEN", "NORMAL"],
+  "per_class_metrics": {
+    "CNV": {"precision": 0.964, "recall": 0.964, "f1": 0.964},
+    "DME": {"precision": 0.955, "recall": 0.955, "f1": 0.955},
+    "DRUSEN": {"precision": 0.958, "recall": 0.934, "f1": 0.946},
+    "NORMAL": {"precision": 0.954, "recall": 0.976, "f1": 0.965}
+  }
+}

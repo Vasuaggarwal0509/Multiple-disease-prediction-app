@@ -1,0 +1,23 @@
+{
+  "model_name": "VGG-16",
+  "disease": "malaria",
+  "dataset": "NIH Malaria Cell Images Dataset",
+  "parameters": "138M",
+  "training_time": "1h 5min",
+  "metrics": {
+    "accuracy": 0.951,
+    "precision": 0.953,
+    "recall": 0.949,
+    "f1_score": 0.951,
+    "auc_roc": 0.989
+  },
+  "confusion_matrix": [
+    [1318, 62],
+    [70, 1308]
+  ],
+  "class_labels": ["Parasitized", "Uninfected"],
+  "per_class_metrics": {
+    "Parasitized": {"precision": 0.950, "recall": 0.955, "f1": 0.952},
+    "Uninfected": {"precision": 0.955, "recall": 0.949, "f1": 0.952}
+  }
+}

@@ -1,0 +1,257 @@
+{
+  "diseases": {
+    "diabetes": {
+      "name": "Diabetes",
+      "type": "tabular",
+      "description": "Prediction of diabetes onset using clinical measurements from the Pima Indians Diabetes Database.",
+      "dataset": {
+        "name": "Pima Indians Diabetes Database",
+        "source": "UCI ML Repository / Kaggle",
+        "url": "https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database",
+        "samples": 768,
+        "features": 8,
+        "classes": ["Not Diabetic", "Diabetic"]
+      },
+      "features": [
+        {"name": "Pregnancies", "label": "Number of Pregnancies", "type": "int"},
+        {"name": "Glucose", "label": "Glucose Level (mg/dL)", "type": "float"},
+        {"name": "BloodPressure", "label": "Blood Pressure (mm Hg)", "type": "float"},
+        {"name": "SkinThickness", "label": "Skin Thickness (mm)", "type": "float"},
+        {"name": "Insulin", "label": "Insulin Level (mu U/ml)", "type": "float"},
+        {"name": "BMI", "label": "BMI (kg/m²)", "type": "float"},
+        {"name": "DiabetesPedigreeFunction", "label": "Diabetes Pedigree Function", "type": "float"},
+        {"name": "Age", "label": "Age (years)", "type": "int"}
+      ],
+      "models": {
+        "svm": {
+          "name": "Support Vector Machine",
+          "file": "models/diabetes/svm_model.sav",
+          "format": "pickle"
+        }
+      }
+    },
+    "heart": {
+      "name": "Heart Disease",
+      "type": "tabular",
+      "description": "Prediction of heart disease presence using the Cleveland Heart Disease dataset with 13 clinical features.",
+      "dataset": {
+        "name": "Cleveland Heart Disease Dataset",
+        "source": "UCI ML Repository / Kaggle",
+        "url": "https://www.kaggle.com/datasets/ronitf/heart-disease-uci",
+        "samples": 303,
+        "features": 13,
+        "classes": ["No Heart Disease", "Heart Disease"]
+      },
+      "features": [
+        {"name": "age", "label": "Age (years)", "type": "int"},
+        {"name": "sex", "label": "Sex (0=Female, 1=Male)", "type": "int"},
+        {"name": "cp", "label": "Chest Pain Type (0-3)", "type": "int"},
+        {"name": "trestbps", "label": "Resting Blood Pressure (mm Hg)", "type": "float"},
+        {"name": "chol", "label": "Serum Cholesterol (mg/dL)", "type": "float"},
+        {"name": "fbs", "label": "Fasting Blood Sugar > 120 (0/1)", "type": "int"},
+        {"name": "restecg", "label": "Resting ECG Results (0-2)", "type": "int"},
+        {"name": "thalach", "label": "Max Heart Rate Achieved", "type": "float"},
+        {"name": "exang", "label": "Exercise Induced Angina (0/1)", "type": "int"},
+        {"name": "oldpeak", "label": "ST Depression (oldpeak)", "type": "float"},
+        {"name": "slope", "label": "Slope of Peak ST Segment (0-2)", "type": "int"},
+        {"name": "ca", "label": "Major Vessels Colored (0-3)", "type": "int"},
+        {"name": "thal", "label": "Thalassemia (0-2)", "type": "int"}
+      ],
+      "models": {
+        "svm": {
+          "name": "Support Vector Machine",
+          "file": "models/heart/svm_model.sav",
+          "format": "pickle"
+        }
+      }
+    },
+    "parkinsons": {
+      "name": "Parkinson's Disease",
+      "type": "tabular",
+      "description": "Detection of Parkinson's disease from voice measurements using 22 biomedical voice features.",
+      "dataset": {
+        "name": "Oxford Parkinson's Disease Detection Dataset",
+        "source": "UCI ML Repository / Kaggle",
+        "url": "https://www.kaggle.com/datasets/vikasukani/parkinsons-disease-data-set",
+        "samples": 195,
+        "features": 22,
+        "classes": ["Healthy", "Parkinson's"]
+      },
+      "features": [
+        {"name": "MDVP:Fo(Hz)", "label": "Avg Vocal Fundamental Freq (Hz)", "type": "float"},
+        {"name": "MDVP:Fhi(Hz)", "label": "Max Vocal Fundamental Freq (Hz)", "type": "float"},
+        {"name": "MDVP:Flo(Hz)", "label": "Min Vocal Fundamental Freq (Hz)", "type": "float"},
+        {"name": "MDVP:Jitter(%)", "label": "Jitter (%)", "type": "float"},
+        {"name": "MDVP:Jitter(Abs)", "label": "Absolute Jitter", "type": "float"},
+        {"name": "MDVP:RAP", "label": "Relative Amplitude Perturbation", "type": "float"},
+        {"name": "MDVP:PPQ", "label": "Period Perturbation Quotient", "type": "float"},
+        {"name": "Jitter:DDP", "label": "Jitter DDP", "type": "float"},
+        {"name": "MDVP:Shimmer", "label": "Shimmer", "type": "float"},
+        {"name": "MDVP:Shimmer(dB)", "label": "Shimmer (dB)", "type": "float"},
+        {"name": "Shimmer:APQ3", "label": "3-Point Amplitude Quotient", "type": "float"},
+        {"name": "Shimmer:APQ5", "label": "5-Point Amplitude Quotient", "type": "float"},
+        {"name": "MDVP:APQ", "label": "Amplitude Perturbation Quotient", "type": "float"},
+        {"name": "Shimmer:DDA", "label": "Shimmer DDA", "type": "float"},
+        {"name": "NHR", "label": "Noise-to-Harmonics Ratio", "type": "float"},
+        {"name": "HNR", "label": "Harmonics-to-Noise Ratio", "type": "float"},
+        {"name": "RPDE", "label": "Recurrence Period Density Entropy", "type": "float"},
+        {"name": "DFA", "label": "Detrended Fluctuation Analysis", "type": "float"},
+        {"name": "spread1", "label": "Nonlinear Spread 1", "type": "float"},
+        {"name": "spread2", "label": "Nonlinear Spread 2", "type": "float"},
+        {"name": "D2", "label": "Correlation Dimension", "type": "float"},
+        {"name": "PPE", "label": "Pitch Period Entropy", "type": "float"}
+      ],
+      "models": {
+        "svm": {
+          "name": "Support Vector Machine",
+          "file": "models/parkinsons/svm_model.sav",
+          "format": "pickle"
+        }
+      }
+    },
+    "eye_disease": {
+      "name": "Eye Disease (OCT)",
+      "type": "image",
+      "description": "Classification of retinal diseases from Optical Coherence Tomography (OCT) images. Identifies CNV, DME, DRUSEN, and Normal retinal conditions.",
+      "dataset": {
+        "name": "Kermany OCT Retinal Images",
+        "source": "Kaggle (Kermany et al., 2018)",
+        "url": "https://www.kaggle.com/datasets/paultimothymooney/kermany2018",
+        "samples": 84495,
+        "classes": ["CNV", "DME", "DRUSEN", "NORMAL"],
+        "image_size": [224, 224]
+      },
+      "models": {
+        "mobilenet_v3": {
+          "name": "MobileNet V3",
+          "file": "models/eye_disease/mobilenet_v3.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "mobilenet_v3"
+        },
+        "resnet50": {
+          "name": "ResNet-50",
+          "file": "models/eye_disease/resnet50.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "resnet50"
+        },
+        "vgg16": {
+          "name": "VGG-16",
+          "file": "models/eye_disease/vgg16.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "vgg16"
+        }
+      }
+    },
+    "brain_tumor": {
+      "name": "Brain Tumor (MRI)",
+      "type": "image",
+      "description": "Classification of brain tumors from MRI scans into Glioma, Meningioma, Pituitary tumor, or No Tumor categories.",
+      "dataset": {
+        "name": "Brain Tumor MRI Dataset",
+        "source": "Kaggle",
+        "url": "https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset",
+        "samples": 7023,
+        "classes": ["Glioma", "Meningioma", "No Tumor", "Pituitary"],
+        "image_size": [224, 224]
+      },
+      "models": {
+        "mobilenet_v3": {
+          "name": "MobileNet V3",
+          "file": "models/brain_tumor/mobilenet_v3.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "mobilenet_v3"
+        },
+        "resnet50": {
+          "name": "ResNet-50",
+          "file": "models/brain_tumor/resnet50.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "resnet50"
+        },
+        "vgg16": {
+          "name": "VGG-16",
+          "file": "models/brain_tumor/vgg16.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "vgg16"
+        }
+      }
+    },
+    "pneumonia": {
+      "name": "Pneumonia (Chest X-Ray)",
+      "type": "image",
+      "description": "Detection of pneumonia from chest X-ray images. Binary classification between Normal and Pneumonia conditions.",
+      "dataset": {
+        "name": "Chest X-Ray Pneumonia Dataset",
+        "source": "Kaggle (Kermany et al., 2018)",
+        "url": "https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia",
+        "samples": 5863,
+        "classes": ["Normal", "Pneumonia"],
+        "image_size": [224, 224]
+      },
+      "models": {
+        "mobilenet_v3": {
+          "name": "MobileNet V3",
+          "file": "models/pneumonia/mobilenet_v3.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "mobilenet_v3"
+        },
+        "resnet50": {
+          "name": "ResNet-50",
+          "file": "models/pneumonia/resnet50.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "resnet50"
+        },
+        "vgg16": {
+          "name": "VGG-16",
+          "file": "models/pneumonia/vgg16.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "vgg16"
+        }
+      }
+    },
+    "malaria": {
+      "name": "Malaria (Cell Images)",
+      "type": "image",
+      "description": "Detection of malaria parasites from thin blood smear cell images. Binary classification between Parasitized and Uninfected cells.",
+      "dataset": {
+        "name": "NIH Malaria Cell Images Dataset",
+        "source": "Kaggle / NIH",
+        "url": "https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria",
+        "samples": 27558,
+        "classes": ["Parasitized", "Uninfected"],
+        "image_size": [224, 224]
+      },
+      "models": {
+        "mobilenet_v3": {
+          "name": "MobileNet V3",
+          "file": "models/malaria/mobilenet_v3.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "mobilenet_v3"
+        },
+        "resnet50": {
+          "name": "ResNet-50",
+          "file": "models/malaria/resnet50.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "resnet50"
+        },
+        "vgg16": {
+          "name": "VGG-16",
+          "file": "models/malaria/vgg16.keras",
+          "format": "keras",
+          "input_size": [224, 224, 3],
+          "preprocess": "vgg16"
+        }
+      }
+    }
+  }
+}

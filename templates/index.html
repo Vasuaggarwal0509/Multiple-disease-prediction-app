@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Home - Disease Prediction System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">Multi-Disease Prediction <br>&amp; Model Comparison</h1>
+                <p class="lead mb-4">
+                    A research platform comparing deep learning architectures (ResNet-50, VGG-16, MobileNet V3)
+                    across multiple medical imaging tasks, alongside classical ML models for clinical data prediction.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="/comparison" class="btn btn-primary btn-lg">
+                        <i class="bi bi-bar-chart"></i> View Comparisons
+                    </a>
+                    <a href="/methodology" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-journal-text"></i> Methodology
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center mt-4 mt-lg-0">
+                <div class="hero-stats">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">7</div>
+                                <div class="stat-label">Diseases</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Models</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">125K+</div>
+                                <div class="stat-label">Images</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <div class="stat-number">3</div>
+                                <div class="stat-label">CNN Architectures</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Disease Cards -->
+<section class="py-5">
+    <div class="container">
+        <!-- Image-Based Diseases -->
+        <h2 class="section-title mb-4">
+            <i class="bi bi-image"></i> Image-Based Disease Classification
+        </h2>
+        <p class="text-muted mb-4">Deep learning models (ResNet-50, VGG-16, MobileNet V3) compared on medical imaging datasets.</p>
+        <div class="row g-4 mb-5">
+            {% for key, disease in diseases.items() %}
+            {% if disease.type == 'image' %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card disease-card h-100">
+                    <div class="card-body">
+                        <div class="disease-icon mb-3">
+                            {% if key == 'eye_disease' %}
+                            <i class="bi bi-eye"></i>
+                            {% elif key == 'brain_tumor' %}
+                            <i class="bi bi-virus"></i>
+                            {% elif key == 'pneumonia' %}
+                            <i class="bi bi-lungs"></i>
+                            {% elif key == 'malaria' %}
+                            <i class="bi bi-droplet"></i>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ disease.name }}</h5>
+                        <p class="card-text small text-muted">{{ disease.description[:100] }}...</p>
+                        <div class="d-flex flex-wrap gap-1 mb-3">
+                            {% for cls in disease.dataset.classes %}
+                            <span class="badge bg-secondary">{{ cls }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="small text-muted mb-3">
+                            <i class="bi bi-database"></i> {{ "{:,}".format(disease.dataset.samples) }} samples
+                            &bull; {{ disease.dataset.classes|length }} classes
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="/disease/{{ key }}" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-arrow-right"></i> Explore &amp; Compare
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Tabular Diseases -->
+        <h2 class="section-title mb-4">
+            <i class="bi bi-table"></i> Clinical Data Prediction
+        </h2>
+        <p class="text-muted mb-4">SVM models for structured clinical data classification.</p>
+        <div class="row g-4">
+            {% for key, disease in diseases.items() %}
+            {% if disease.type == 'tabular' %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card disease-card h-100">
+                    <div class="card-body">
+                        <div class="disease-icon mb-3">
+                            {% if key == 'diabetes' %}
+                            <i class="bi bi-droplet-half"></i>
+                            {% elif key == 'heart' %}
+                            <i class="bi bi-heart-pulse"></i>
+                            {% elif key == 'parkinsons' %}
+                            <i class="bi bi-activity"></i>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ disease.name }}</h5>
+                        <p class="card-text small text-muted">{{ disease.description[:100] }}...</p>
+                        <div class="small text-muted mb-3">
+                            <i class="bi bi-database"></i> {{ disease.dataset.samples }} samples
+                            &bull; {{ disease.dataset.features }} features
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="/disease/{{ key }}" class="btn btn-sm btn-outline-primary w-100">
+                            <i class="bi bi-arrow-right"></i> Predict
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

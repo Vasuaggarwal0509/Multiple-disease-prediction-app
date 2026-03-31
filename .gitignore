@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.local
+
+# Model files (too large for git - download via scripts/download_models.py)
+models/**/*.keras
+models/**/*.h5
+models/**/*.sav
+Human_Eye_Disease_Prediction/Trained_Model.keras
+Human_Eye_Disease_Prediction/Trained_Model.h5
+Saved_models/*.sav
+
+# Test images
+test_data/**/*.jpg
+test_data/**/*.jpeg
+test_data/**/*.png
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Logs
+*.log
+
+# Flask
+instance/

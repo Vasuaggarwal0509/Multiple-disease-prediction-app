@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+{% block title %}{{ disease.name }} - Disease Prediction System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">{{ disease.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Disease Header -->
+    <div class="disease-header mb-4">
+        <h1 class="fw-bold">{{ disease.name }}</h1>
+        <p class="lead text-muted">{{ disease.description }}</p>
+        <div class="d-flex flex-wrap gap-3 mt-3">
+            <span class="badge-info-pill">
+                <i class="bi bi-database"></i> {{ "{:,}".format(disease.dataset.samples) }} samples
+            </span>
+            <span class="badge-info-pill">
+                <i class="bi bi-collection"></i> {{ disease.dataset.classes|length }} classes
+            </span>
+            <span class="badge-info-pill">
+                <i class="bi bi-link-45deg"></i>
+                <a href="{{ disease.dataset.url }}" target="_blank">{{ disease.dataset.source }}</a>
+            </span>
+            {% if disease.type == 'image' %}
+            <span class="badge-info-pill">
+                <i class="bi bi-cpu"></i> 3 CNN Models Compared
+            </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs nav-tabs-custom" id="diseaseTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="predict-tab" data-bs-toggle="tab" data-bs-target="#predict" type="button">
+                <i class="bi bi-lightning"></i> Predict
+            </button>
+        </li>
+        {% if disease.type == 'image' %}
+        <li class="nav-item">
+            <button class="nav-link" id="compare-tab" data-bs-toggle="tab" data-bs-target="#compare" type="button">
+                <i class="bi bi-bar-chart"></i> Model Comparison
+            </button>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+            <button class="nav-link" id="refs-tab" data-bs-toggle="tab" data-bs-target="#refs" type="button">
+                <i class="bi bi-journal-text"></i> References
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content py-4" id="diseaseTabContent">
+        <!-- Predict Tab -->
+        <div class="tab-pane fade show active" id="predict" role="tabpanel">
+            {% if disease.type == 'tabular' %}
+            <!-- Tabular Prediction Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-input-cursor-text"></i> Enter Clinical Values</h5>
+                </div>
+                <div class="card-body">
+                    <form id="tabularForm" data-disease="{{ disease_key }}">
+                        <div class="row g-3">
+                            {% for feature in disease.features %}
+                            <div class="col-md-4 col-lg-3">
+                                <label class="form-label small fw-semibold">{{ feature.label }}</label>
+                                <input type="number" step="any" class="form-control feature-input"
+                                       name="{{ feature.name }}" placeholder="0" required>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-lightning"></i> Run Prediction
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Result Display -->
+                    <div id="tabularResult" class="mt-4" style="display: none;">
+                        <div class="result-card">
+                            <h5><i class="bi bi-check-circle"></i> Prediction Result</h5>
+                            <div id="tabularResultContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <!-- Image Prediction -->
+            <div class="row g-4">
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="bi bi-upload"></i> Upload Image</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="imageForm" data-disease="{{ disease_key }}" enctype="multipart/form-data">
+                                <div class="upload-zone" id="uploadZone">
+                                    <i class="bi bi-cloud-arrow-up display-4"></i>
+                                    <p class="mt-2">Drag & drop an image here or click to browse</p>
+                                    <p class="small text-muted">Supported: JPG, PNG, JPEG</p>
+                                    <input type="file" id="imageInput" name="image" accept="image/*" class="d-none">
+                                </div>
+                                <div id="imagePreview" class="mt-3 text-center" style="display: none;">
+                                    <img id="previewImg" class="img-fluid rounded" style="max-height: 300px;">
+                                    <button type="button" class="btn btn-sm btn-outline-danger mt-2" id="clearImage">
+                                        <i class="bi bi-x"></i> Clear
+                                    </button>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg w-100 mt-3" id="predictBtn" disabled>
+                                    <i class="bi bi-lightning"></i> Run All Models
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-7">
+                    <!-- Loading Spinner -->
+                    <div id="predictionLoading" style="display: none;">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3 text-muted">Running inference on all models...</p>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div id="imageResults" style="display: none;">
+                        <h5 class="mb-3"><i class="bi bi-graph-up"></i> Multi-Model Predictions</h5>
+                        <div id="modelResultsGrid" class="row g-3"></div>
+                    </div>
+
+                    <!-- Placeholder when no image -->
+                    <div id="resultsPlaceholder">
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-image display-1"></i>
+                            <p class="mt-3">Upload an image to see predictions from all {{ disease.models|length }} models side by side</p>
+                            <div class="d-flex justify-content-center gap-2 mt-2">
+                                {% for mk, mv in disease.models.items() %}
+                                <span class="badge bg-primary">{{ mv.name }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if disease.type == 'image' %}
+        <!-- Model Comparison Tab -->
+        <div class="tab-pane fade" id="compare" role="tabpanel">
+            {% if comparison_table %}
+            <!-- Metrics Table -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-table"></i> Performance Metrics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover metrics-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Accuracy</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>F1 Score</th>
+                                    <th>AUC-ROC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in comparison_table %}
+                                <tr>
+                                    <td class="fw-semibold">{{ row.Model }}</td>
+                                    <td><span class="metric-value">{{ "%.2f"|format(row.Accuracy * 100) }}%</span></td>
+                                    <td><span class="metric-value">{{ "%.2f"|format(row.Precision * 100) }}%</span></td>
+                                    <td><span class="metric-value">{{ "%.2f"|format(row.Recall * 100) }}%</span></td>
+                                    <td><span class="metric-value">{{ "%.2f"|format(row['F1 Score'] * 100) }}%</span></td>
+                                    <td><span class="metric-value">{{ "%.4f"|format(row['AUC-ROC']) }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header"><h6 class="mb-0">Metrics Comparison</h6></div>
+                        <div class="card-body">
+                            <canvas id="metricsBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header"><h6 class="mb-0">Accuracy Comparison</h6></div>
+                        <div class="card-body">
+                            <canvas id="accuracyRadarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confusion Matrices -->
+            <div class="row g-4 mt-2">
+                {% for model_key, model_metrics in metrics.items() %}
+                {% if model_metrics.confusion_matrix is defined %}
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">{{ model_metrics.model_name }} - Confusion Matrix</h6>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="cm_{{ model_key }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+
+            {% else %}
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-exclamation-circle display-1"></i>
+                <h4 class="mt-3">No Metrics Available Yet</h4>
+                <p>Run the training notebooks to generate pre-computed metrics for model comparison.</p>
+                <p class="small">Metrics JSON files should be placed in <code>metrics/{{ disease_key }}/</code></p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- References Tab -->
+        <div class="tab-pane fade" id="refs" role="tabpanel">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Research References</h5>
+                </div>
+                <div class="card-body">
+                    {% if references %}
+                    {% if references.dataset_paper is defined %}
+                    <h6 class="fw-bold mt-3">Dataset Paper</h6>
+                    <div class="reference-item">
+                        <p>
+                            {{ references.dataset_paper.authors }} ({{ references.dataset_paper.year }}).
+                            <em>{{ references.dataset_paper.title }}</em>.
+                            {{ references.dataset_paper.journal }}.
+                            {% if references.dataset_paper.doi %}
+                            DOI: <a href="https://doi.org/{{ references.dataset_paper.doi }}" target="_blank">{{ references.dataset_paper.doi }}</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    {% if references.model_papers is defined %}
+                    <h6 class="fw-bold mt-4">Model Architecture Papers</h6>
+                    {% for paper in references.model_papers %}
+                    <div class="reference-item">
+                        <p>
+                            <span class="badge bg-primary me-1">{{ paper.model }}</span>
+                            {{ paper.authors }} ({{ paper.year }}).
+                            <em>{{ paper.title }}</em>.
+                            {{ paper.journal }}.
+                            {% if paper.doi %}
+                            DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% if references.related_papers is defined %}
+                    <h6 class="fw-bold mt-4">Related Work</h6>
+                    {% for paper in references.related_papers %}
+                    <div class="reference-item">
+                        <p>
+                            {{ paper.authors }} ({{ paper.year }}).
+                            <em>{{ paper.title }}</em>.
+                            {{ paper.journal }}.
+                            {% if paper.doi %}
+                            DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    {% else %}
+                    <p class="text-muted">No references available for this disease.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+    // Pass metrics data to JS for chart rendering
+    const diseaseKey = "{{ disease_key }}";
+    const diseaseType = "{{ disease.type }}";
+    const metricsData = {{ metrics | tojson }};
+    const classLabels = {{ disease.dataset.classes | tojson }};
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (diseaseType === 'image' && Object.keys(metricsData).length > 0) {
+            renderMetricsBarChart('metricsBarChart', metricsData);
+            renderAccuracyRadar('accuracyRadarChart', metricsData);
+            renderConfusionMatrices(metricsData, classLabels);
+        }
+    });
+</script>
+{% endblock %}

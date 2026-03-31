@@ -1,0 +1,143 @@
+{
+  "eye_disease": {
+    "dataset_paper": {
+      "authors": "Kermany, D.S., Goldbaum, M., Cai, W., et al.",
+      "year": 2018,
+      "title": "Identifying Medical Diagnoses and Treatable Diseases by Image-Based Deep Learning",
+      "journal": "Cell",
+      "volume": "172(5)",
+      "pages": "1122-1131",
+      "doi": "10.1016/j.cell.2018.02.010"
+    },
+    "model_papers": [
+      {
+        "model": "MobileNet V3",
+        "authors": "Howard, A., Sandler, M., Chen, B., et al.",
+        "year": 2019,
+        "title": "Searching for MobileNetV3",
+        "journal": "IEEE/CVF International Conference on Computer Vision (ICCV)",
+        "doi": "10.1109/ICCV.2019.00140"
+      },
+      {
+        "model": "ResNet-50",
+        "authors": "He, K., Zhang, X., Ren, S., Sun, J.",
+        "year": 2016,
+        "title": "Deep Residual Learning for Image Recognition",
+        "journal": "IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+        "doi": "10.1109/CVPR.2016.90"
+      },
+      {
+        "model": "VGG-16",
+        "authors": "Simonyan, K., Zisserman, A.",
+        "year": 2015,
+        "title": "Very Deep Convolutional Networks for Large-Scale Image Recognition",
+        "journal": "International Conference on Learning Representations (ICLR)",
+        "doi": "10.48550/arXiv.1409.1556"
+      }
+    ]
+  },
+  "brain_tumor": {
+    "dataset_paper": {
+      "authors": "Nickparvar, M.",
+      "year": 2021,
+      "title": "Brain Tumor MRI Dataset",
+      "journal": "Kaggle Dataset",
+      "doi": ""
+    },
+    "related_papers": [
+      {
+        "authors": "Badza, M.M., Barjaktarovic, M.C.",
+        "year": 2020,
+        "title": "Classification of Brain Tumors from MRI Images Using a Convolutional Neural Network",
+        "journal": "Applied Sciences",
+        "volume": "10(6)",
+        "doi": "10.3390/app10061999"
+      },
+      {
+        "authors": "Deepak, S., Ameer, P.M.",
+        "year": 2019,
+        "title": "Brain Tumor Classification Using Deep CNN Features via Transfer Learning",
+        "journal": "Computers in Biology and Medicine",
+        "volume": "111",
+        "doi": "10.1016/j.compbiomed.2019.103345"
+      }
+    ]
+  },
+  "pneumonia": {
+    "dataset_paper": {
+      "authors": "Kermany, D.S., Goldbaum, M., Cai, W., et al.",
+      "year": 2018,
+      "title": "Identifying Medical Diagnoses and Treatable Diseases by Image-Based Deep Learning",
+      "journal": "Cell",
+      "volume": "172(5)",
+      "pages": "1122-1131",
+      "doi": "10.1016/j.cell.2018.02.010"
+    },
+    "related_papers": [
+      {
+        "authors": "Rajpurkar, P., Irvin, J., Zhu, K., et al.",
+        "year": 2017,
+        "title": "CheXNet: Radiologist-Level Pneumonia Detection on Chest X-Rays with Deep Learning",
+        "journal": "arXiv preprint",
+        "doi": "10.48550/arXiv.1711.05225"
+      },
+      {
+        "authors": "Stephen, O., Sain, M., Maduh, U.J., Jeong, D.U.",
+        "year": 2019,
+        "title": "An Efficient Deep Learning Approach to Pneumonia Classification in Healthcare",
+        "journal": "Journal of Healthcare Engineering",
+        "doi": "10.1155/2019/4180949"
+      }
+    ]
+  },
+  "malaria": {
+    "dataset_paper": {
+      "authors": "Rajaraman, S., Antani, S.K., Poostchi, M., et al.",
+      "year": 2018,
+      "title": "Pre-trained Convolutional Neural Networks as Feature Extractors toward Improved Malaria Parasite Detection in Thin Blood Smear Images",
+      "journal": "PeerJ",
+      "volume": "6",
+      "doi": "10.7717/peerj.4568"
+    },
+    "related_papers": [
+      {
+        "authors": "Rajaraman, S., Jaeger, S., Antani, S.K.",
+        "year": 2019,
+        "title": "Performance Evaluation of Deep Neural Ensembles toward Malaria Parasite Detection in Thin-Blood Smear Images",
+        "journal": "PeerJ",
+        "volume": "7",
+        "doi": "10.7717/peerj.6977"
+      }
+    ]
+  },
+  "diabetes": {
+    "dataset_paper": {
+      "authors": "Smith, J.W., Everhart, J.E., Dickson, W.C., Knowler, W.C., Johannes, R.S.",
+      "year": 1988,
+      "title": "Using the ADAP Learning Algorithm to Forecast the Onset of Diabetes Mellitus",
+      "journal": "Proceedings of the Annual Symposium on Computer Application in Medical Care",
+      "pages": "261-265"
+    }
+  },
+  "heart": {
+    "dataset_paper": {
+      "authors": "Detrano, R., Janosi, A., Steinbrunn, W., et al.",
+      "year": 1989,
+      "title": "International Application of a New Probability Algorithm for the Diagnosis of Coronary Artery Disease",
+      "journal": "American Journal of Cardiology",
+      "volume": "64(5)",
+      "pages": "304-310",
+      "doi": "10.1016/0002-9149(89)90524-9"
+    }
+  },
+  "parkinsons": {
+    "dataset_paper": {
+      "authors": "Little, M.A., McSharry, P.E., Roberts, S.J., Costello, D.A., Moroz, I.M.",
+      "year": 2009,
+      "title": "Exploiting Nonlinear Recurrence and Fractal Scaling Properties for Voice Disorder Detection",
+      "journal": "BioMedical Engineering OnLine",
+      "volume": "6(1)",
+      "doi": "10.1186/1475-925X-6-23"
+    }
+  }
+}

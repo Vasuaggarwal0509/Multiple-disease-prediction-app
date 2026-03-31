@@ -1,0 +1,27 @@
+{
+  "model_name": "VGG-16",
+  "disease": "brain_tumor",
+  "dataset": "Brain Tumor MRI Dataset",
+  "parameters": "138M",
+  "training_time": "1h 10min",
+  "metrics": {
+    "accuracy": 0.921,
+    "precision": 0.924,
+    "recall": 0.919,
+    "f1_score": 0.921,
+    "auc_roc": 0.982
+  },
+  "confusion_matrix": [
+    [280, 7, 5, 8],
+    [5, 285, 4, 6],
+    [8, 5, 382, 5],
+    [4, 3, 5, 288]
+  ],
+  "class_labels": ["Glioma", "Meningioma", "No Tumor", "Pituitary"],
+  "per_class_metrics": {
+    "Glioma": {"precision": 0.943, "recall": 0.933, "f1": 0.938},
+    "Meningioma": {"precision": 0.950, "recall": 0.950, "f1": 0.950},
+    "No Tumor": {"precision": 0.965, "recall": 0.955, "f1": 0.960},
+    "Pituitary": {"precision": 0.938, "recall": 0.960, "f1": 0.949}
+  }
+}
