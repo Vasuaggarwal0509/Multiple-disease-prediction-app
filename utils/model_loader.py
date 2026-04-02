@@ -1,6 +1,9 @@
 import os
 import pickle
 import json
+import logging
+
+log = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
@@ -11,24 +14,35 @@ _model_cache = {}
 
 
 def get_disease_config(disease_key):
-    with open(os.path.join(CONFIG_DIR, "diseases.json")) as f:
-        config = json.load(f)
-    return config["diseases"].get(disease_key)
+    try:
+        with open(os.path.join(CONFIG_DIR, "diseases.json")) as f:
+            config = json.load(f)
+        return config["diseases"].get(disease_key)
+    except (FileNotFoundError, json.JSONDecodeError, KeyError) as e:
+        log.error(f"Failed to load disease config: {e}")
+        return None
 
 
 def load_pickle_model(path):
-    with open(path, "rb") as f:
-        return pickle.load(f)
+    try:
+        with open(path, "rb") as f:
+            return pickle.load(f)
+    except Exception as e:
+        log.error(f"Failed to load pickle model {path}: {e}")
+        return None
 
 
 def load_keras_model(path):
-    # Lazy import to avoid loading TF at startup unless needed
-    from tensorflow.keras.models import load_model
-    return load_model(path)
+    try:
+        from tensorflow.keras.models import load_model
+        return load_model(path, compile=False)
+    except Exception as e:
+        log.error(f"Failed to load Keras model {path}: {e}")
+        return None
 
 
 def load_model(disease_key, model_key):
-    """Load a single model by disease and model key. Returns None if file missing."""
+    """Load a single model by disease and model key. Returns None if file missing or load fails."""
     cache_key = f"{disease_key}/{model_key}"
     if cache_key in _model_cache:
         return _model_cache[cache_key]
@@ -43,6 +57,7 @@ def load_model(disease_key, model_key):
 
     model_path = os.path.join(BASE_DIR, model_config["file"])
     if not os.path.exists(model_path):
+        log.warning(f"Model file not found: {model_path}")
         return None
 
     fmt = model_config.get("format", "pickle")
@@ -53,7 +68,8 @@ def load_model(disease_key, model_key):
     else:
         return None
 
-    _model_cache[cache_key] = model
+    if model is not None:
+        _model_cache[cache_key] = model
     return model
 
 

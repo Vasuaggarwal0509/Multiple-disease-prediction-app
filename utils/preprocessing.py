@@ -14,7 +14,10 @@ def preprocess_image(image_file, preprocess_type="mobilenet_v3"):
     Returns:
         numpy array of shape (1, 224, 224, 3) ready for model.predict()
     """
-    img = Image.open(image_file).convert("RGB")
+    try:
+        img = Image.open(image_file).convert("RGB")
+    except Exception as e:
+        raise ValueError(f"Invalid image file: {e}")
     img = img.resize(TARGET_SIZE)
     img_array = np.array(img, dtype=np.float32)
 

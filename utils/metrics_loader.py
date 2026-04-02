@@ -1,19 +1,38 @@
 import json
 import os
+import logging
 import pandas as pd
+
+log = logging.getLogger(__name__)
 
 METRICS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "metrics")
 CONFIG_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config")
 
 
 def load_disease_config():
-    with open(os.path.join(CONFIG_DIR, "diseases.json")) as f:
-        return json.load(f)["diseases"]
+    path = os.path.join(CONFIG_DIR, "diseases.json")
+    try:
+        with open(path) as f:
+            return json.load(f)["diseases"]
+    except FileNotFoundError:
+        log.error(f"Config file not found: {path}")
+        return {}
+    except (json.JSONDecodeError, KeyError) as e:
+        log.error(f"Invalid config file {path}: {e}")
+        return {}
 
 
 def load_references():
-    with open(os.path.join(CONFIG_DIR, "references.json")) as f:
-        return json.load(f)
+    path = os.path.join(CONFIG_DIR, "references.json")
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        log.error(f"References file not found: {path}")
+        return {}
+    except json.JSONDecodeError as e:
+        log.error(f"Invalid references file {path}: {e}")
+        return {}
 
 
 def load_model_metrics(disease_key, model_key):
@@ -21,8 +40,12 @@ def load_model_metrics(disease_key, model_key):
     path = os.path.join(METRICS_DIR, disease_key, f"{model_key}_metrics.json")
     if not os.path.exists(path):
         return None
-    with open(path) as f:
-        return json.load(f)
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except json.JSONDecodeError as e:
+        log.error(f"Invalid metrics file {path}: {e}")
+        return None
 
 
 def load_all_metrics(disease_key):
@@ -34,8 +57,11 @@ def load_all_metrics(disease_key):
     for fname in os.listdir(disease_dir):
         if fname.endswith("_metrics.json"):
             model_key = fname.replace("_metrics.json", "")
-            with open(os.path.join(disease_dir, fname)) as f:
-                metrics[model_key] = json.load(f)
+            try:
+                with open(os.path.join(disease_dir, fname)) as f:
+                    metrics[model_key] = json.load(f)
+            except json.JSONDecodeError as e:
+                log.error(f"Invalid metrics file {fname}: {e}")
     return metrics
 
 

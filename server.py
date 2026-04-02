@@ -1,5 +1,5 @@
 import os
-import json
+import logging
 from flask import Flask, render_template, request, jsonify
 from utils.metrics_loader import (
     load_disease_config,
@@ -10,14 +10,23 @@ from utils.metrics_loader import (
 from utils.model_loader import list_available_models
 from utils.prediction import predict_tabular, predict_image_all_models
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+log = logging.getLogger(__name__)
+
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB upload limit
 
 BASE_DIR = os.path.dirname(__file__)
 
 # Load configs once at startup
-DISEASES = load_disease_config()
-REFERENCES = load_references()
+try:
+    DISEASES = load_disease_config()
+    REFERENCES = load_references()
+    log.info(f"Loaded {len(DISEASES)} diseases, {len(REFERENCES)} reference entries")
+except Exception as e:
+    log.error(f"Failed to load config files: {e}")
+    DISEASES = {}
+    REFERENCES = {}
 
 
 @app.route("/")
@@ -52,7 +61,7 @@ def disease_page(disease_key):
 @app.route("/predict/tabular", methods=["POST"])
 def predict_tabular_route():
     """API endpoint for tabular disease prediction."""
-    data = request.get_json()
+    data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Invalid request - JSON required"}), 400
     disease_key = data.get("disease_key")
@@ -80,7 +89,17 @@ def predict_image_route():
         return jsonify({"error": "No image uploaded"}), 400
 
     image_file = request.files["image"]
-    results = predict_image_all_models(disease_key, image_file)
+    if not image_file.filename:
+        return jsonify({"error": "Empty file uploaded"}), 400
+
+    try:
+        results = predict_image_all_models(disease_key, image_file)
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        log.error(f"Image prediction error: {e}")
+        return jsonify({"error": "Prediction failed. Check server logs."}), 500
+
     return jsonify({"results": results, "disease": DISEASES[disease_key]["name"]})
 
 
@@ -113,4 +132,4 @@ def api_metrics(disease_key):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=True, use_reloader=False, host="0.0.0.0", port=5000)

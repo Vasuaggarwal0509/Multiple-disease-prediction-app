@@ -1,22 +1,19 @@
 # Core
-numpy>=1.26.0
-pandas>=2.1.0
-scikit-learn>=1.3.0
+numpy>=1.26.0,<2.0.0
+pandas>=2.1.0,<3.0.0
+scikit-learn>=1.3.0,<2.0.0
 
-# Web Framework (Flask for main app, Streamlit for legacy app)
-flask>=3.0.0
-streamlit<2.0.0
-streamlit_option_menu==0.3.13
+# Web Framework
+flask>=3.0.0,<4.0.0
 
 # Deep Learning
+# NOTE: Models must be built with the same TF/Keras version that loads them.
+# Run `python setup.py` after installing to build models for your environment.
 tensorflow>=2.10.0
 
 # Image Processing
-Pillow>=9.0.0
+Pillow>=9.0.0,<12.0.0
 
 # Visualization (used in notebooks)
-matplotlib>=3.7.2
-seaborn>=0.13.0
-
-# Audio (Parkinson's voice feature extraction in notebooks)
-librosa>=0.10.1
+matplotlib>=3.7.2,<4.0.0
+seaborn>=0.13.0,<1.0.0

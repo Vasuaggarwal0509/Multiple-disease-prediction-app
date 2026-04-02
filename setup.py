@@ -4,6 +4,9 @@ Setup script for the Multi-Disease Prediction System.
 Downloads and builds all CNN model files required by the application.
 Models use ImageNet pre-trained weights with disease-specific classification heads.
 
+IMPORTANT: Run this script in the SAME Python environment where you run server.py.
+Models saved with one TensorFlow/Keras version may not load in another.
+
 Usage:
     python setup.py
 
