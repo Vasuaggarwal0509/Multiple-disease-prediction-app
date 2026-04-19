@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Methodology - Disease Prediction System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item active">Methodology</li>
+        </ol>
+    </nav>
+
+    <h1 class="fw-bold mb-2">Inference Methodology</h1>
+    <p class="lead text-muted mb-4">
+        Each disease is handled by a dedicated model trained on its specialized dataset. This page documents the architecture and inference pipeline for every model in the system.
+    </p>
+
+    <!-- Image Models -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-image"></i> Image-Based Disease Models</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Each image model receives a raw upload, applies architecture-specific preprocessing, and returns a single prediction with per-class probabilities.</p>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Disease</th>
+                            <th>Architecture</th>
+                            <th>Input Size</th>
+                            <th>Preprocessing</th>
+                            <th>Output</th>
+                            <th>Classes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="fw-semibold">Eye Disease (OCT)</td>
+                            <td>MobileNet V3 (fine-tuned)</td>
+                            <td>224 x 224 x 3</td>
+                            <td>MobileNet V3 <code>preprocess_input</code> ([-1, 1] scaling)</td>
+                            <td>Softmax (4-way)</td>
+                            <td>CNV, DME, DRUSEN, NORMAL</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Pneumonia (X-Ray)</td>
+                            <td>Custom CNN (5 Conv+Pool blocks)</td>
+                            <td>300 x 300 x 3</td>
+                            <td>Rescale by 1/255</td>
+                            <td>Sigmoid (binary)</td>
+                            <td>Normal, Pneumonia</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-semibold">Malaria (Cell)</td>
+                            <td>Custom CNN (5 Conv+Pool blocks)</td>
+                            <td>130 x 130 x 3</td>
+                            <td>Rescale by 1/255</td>
+                            <td>Sigmoid (binary)</td>
+                            <td>Parasitized, Uninfected</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h6 class="fw-bold mt-4">Inference Pipeline</h6>
+            <ol class="method-list">
+                <li>User uploads an image via the browser interface.</li>
+                <li>Image is converted to RGB and resized to the target input dimensions for the specific model.</li>
+                <li>Architecture-specific preprocessing is applied (either <code>preprocess_input</code> or simple 1/255 rescaling).</li>
+                <li>The preprocessed tensor is passed to the trained model for inference.</li>
+                <li>Output probabilities are returned alongside the predicted class label and confidence score.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Tabular Models -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-table"></i> Tabular Clinical Data Models</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Clinical feature values are passed to trained Support Vector Machine classifiers. All tabular models use linear kernel SVM with StandardScaler preprocessing applied during training.</p>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Disease</th>
+                            <th>Algorithm</th>
+                            <th>Features</th>
+                            <th>Samples</th>
+                            <th>Classes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, disease in diseases.items() %}
+                        {% if disease.type == 'tabular' %}
+                        <tr>
+                            <td class="fw-semibold">{{ disease.name }}</td>
+                            <td>SVM (linear kernel)</td>
+                            <td>{{ disease.features|length }}</td>
+                            <td>{{ disease.dataset.samples }}</td>
+                            <td>{{ disease.dataset.classes | join(', ') }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datasets -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-database"></i> Datasets</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Disease</th>
+                            <th>Dataset</th>
+                            <th>Samples</th>
+                            <th>Type</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, disease in diseases.items() %}
+                        <tr>
+                            <td class="fw-semibold">{{ disease.name }}</td>
+                            <td>{{ disease.dataset.name }}</td>
+                            <td>{{ "{:,}".format(disease.dataset.samples) }}</td>
+                            <td>
+                                {% if disease.type == 'image' %}
+                                <span class="badge bg-info">Image</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Tabular</span>
+                                {% endif %}
+                            </td>
+                            <td><a href="{{ disease.dataset.url }}" target="_blank">{{ disease.dataset.source }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- References -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Bibliography</h5>
+        </div>
+        <div class="card-body">
+            {% for disease_key, refs in references.items() %}
+            {% if disease_key in diseases %}
+            <h6 class="fw-bold mt-3 text-primary">{{ diseases[disease_key].name }}</h6>
+            {% if refs.dataset_paper is defined %}
+            <div class="reference-item">
+                <span class="badge bg-dark me-1">Dataset</span>
+                {{ refs.dataset_paper.authors }} ({{ refs.dataset_paper.year }}).
+                <em>{{ refs.dataset_paper.title }}</em>.
+                {{ refs.dataset_paper.journal }}.
+                {% if refs.dataset_paper.doi is defined and refs.dataset_paper.doi %}
+                DOI: <a href="https://doi.org/{{ refs.dataset_paper.doi }}" target="_blank">{{ refs.dataset_paper.doi }}</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% if refs.related_papers is defined %}
+            {% for paper in refs.related_papers %}
+            <div class="reference-item">
+                <span class="badge bg-success me-1">Related</span>
+                {{ paper.authors }} ({{ paper.year }}).
+                <em>{{ paper.title }}</em>.
+                {{ paper.journal }}.
+                {% if paper.doi %}
+                DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,480 @@
+/* ============================================
+   Disease Prediction System - Custom Styles
+   ============================================ */
+
+:root {
+    --primary: #4361ee;
+    --primary-dark: #3a56d4;
+    --secondary: #7209b7;
+    --accent: #f72585;
+    --success: #06d6a0;
+    --warning: #ffd166;
+    --dark: #1a1a2e;
+    --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f5f7fb;
+    color: #2d3436;
+}
+
+/* Navbar */
+.navbar {
+    background: white;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    padding: 0.8rem 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary) !important;
+    font-size: 1.15rem;
+}
+
+.navbar-brand i {
+    color: var(--accent);
+}
+
+.nav-link {
+    font-weight: 500;
+    color: #555 !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    color: var(--primary) !important;
+    background: rgba(67, 97, 238, 0.06);
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--dark) 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 0;
+}
+
+.hero-section .lead {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+}
+
+.hero-section .btn-primary {
+    background: var(--primary);
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.hero-section .btn-outline-light {
+    border-radius: 10px;
+    padding: 0.7rem 1.5rem;
+    font-weight: 600;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: var(--border-radius);
+    padding: 1.2rem;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--success);
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.stat-card-alt {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+}
+
+.stat-card-alt .stat-number {
+    font-size: 2.5rem;
+}
+
+.stat-card-alt .stat-label {
+    color: #666;
+}
+
+/* Section Titles */
+.section-title {
+    font-weight: 700;
+    color: var(--dark);
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+.section-title i {
+    color: var(--primary);
+    margin-right: 0.3rem;
+}
+
+/* Disease Cards */
+.disease-card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.disease-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-4px);
+}
+
+.disease-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+}
+
+.disease-card .card-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Disease Page Header */
+.disease-header {
+    padding: 1.5rem 0;
+    border-bottom: 2px solid rgba(67, 97, 238, 0.1);
+}
+
+.badge-info-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(67, 97, 238, 0.08);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.badge-info-pill a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* Custom Tabs */
+.nav-tabs-custom {
+    border-bottom: 2px solid #eee;
+}
+
+.nav-tabs-custom .nav-link {
+    border: none;
+    color: #888 !important;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem !important;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+}
+
+.nav-tabs-custom .nav-link.active {
+    color: var(--primary) !important;
+    background: transparent;
+    border-bottom-color: var(--primary);
+}
+
+.nav-tabs-custom .nav-link:hover:not(.active) {
+    border-bottom-color: #ddd;
+    background: transparent;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+}
+
+.card-header {
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 1rem 1.25rem;
+    border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+}
+
+/* Upload Zone */
+.upload-zone {
+    border: 2px dashed #ccc;
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #888;
+}
+
+.upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--primary);
+    background: rgba(67, 97, 238, 0.04);
+    color: var(--primary);
+}
+
+/* Result Cards */
+.result-card {
+    background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    border-left: 4px solid var(--success);
+}
+
+.model-result-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    box-shadow: var(--card-shadow);
+    border-top: 3px solid var(--primary);
+    height: 100%;
+}
+
+.model-result-card .model-name {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.9rem;
+}
+
+.model-result-card .prediction-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.model-result-card .confidence-bar {
+    height: 6px;
+    border-radius: 3px;
+    background: #eee;
+    overflow: hidden;
+}
+
+.model-result-card .confidence-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    transition: width 0.6s ease;
+}
+
+.model-result-card.unavailable {
+    opacity: 0.5;
+    border-top-color: #ccc;
+}
+
+/* Metrics Table */
+.metrics-table th {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.metric-value {
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+}
+
+/* Confusion Matrix Grid */
+.cm-grid {
+    padding: 0.5rem;
+}
+
+.cm-grid .table {
+    margin-bottom: 0;
+}
+
+/* Best Model Card */
+.best-model-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    border-top: 3px solid var(--success);
+}
+
+.best-model-name {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}
+
+.best-model-acc {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--success);
+}
+
+/* References */
+.reference-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.reference-item:last-child {
+    border-bottom: none;
+}
+
+/* Methodology */
+.method-list {
+    list-style: none;
+    padding: 0;
+}
+
+.method-list li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.method-list li::before {
+    content: "\2022";
+    color: var(--primary);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.metric-def-card {
+    background: #f8f9fc;
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    height: 100%;
+}
+
+.metric-def-card h6 {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.metric-def-card code {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--dark);
+}
+
+/* Footer */
+footer {
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2.5rem 0;
+    }
+
+    .hero-section .display-4 {
+        font-size: 1.8rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.disease-card {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.disease-card:nth-child(2) { animation-delay: 0.1s; }
+.disease-card:nth-child(3) { animation-delay: 0.2s; }
+.disease-card:nth-child(4) { animation-delay: 0.3s; }
+
+/* Form Styles */
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.form-label {
+    color: #555;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+}
+
+/* Probability bars in results */
+.prob-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.prob-label {
+    width: 80px;
+    text-align: right;
+    font-weight: 500;
+    color: #666;
+}
+
+.prob-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.prob-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--primary);
+    transition: width 0.6s ease;
+}
+
+.prob-value {
+    width: 45px;
+    font-family: monospace;
+    font-weight: 600;
+    color: #333;
+}

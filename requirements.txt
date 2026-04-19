@@ -1,5 +1,20 @@
-numpy>=1.23.2  
-pandas==2.2.2  
-scikit-learn>=1.5.1  
-streamlit<2.0.0  
-streamlit_option_menu==0.3.13
+# Core
+numpy>=1.26.0,<2.0.0
+pandas>=2.1.0,<3.0.0
+scikit-learn>=1.3.0,<2.0.0
+
+# Web Framework
+flask>=3.0.0,<4.0.0
+
+# Deep Learning (for image disease inference)
+# NOTE: TensorFlow 2.16+ ships Keras 3.x which cannot load the eye disease
+# trained model (saved with Keras 2.x, uses '/' in layer names).
+# Pin to 2.14-2.15 for guaranteed compatibility.
+tensorflow>=2.14.0,<2.16.0
+
+# Image Processing
+Pillow>=9.0.0,<12.0.0
+
+# Visualization (used in training notebooks only, not required at runtime)
+matplotlib>=3.7.2,<4.0.0
+seaborn>=0.13.0,<1.0.0
