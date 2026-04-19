@@ -36,33 +36,6 @@
       }
     ]
   },
-  "brain_tumor": {
-    "dataset_paper": {
-      "authors": "Nickparvar, M.",
-      "year": 2021,
-      "title": "Brain Tumor MRI Dataset",
-      "journal": "Kaggle Dataset",
-      "doi": ""
-    },
-    "related_papers": [
-      {
-        "authors": "Badza, M.M., Barjaktarovic, M.C.",
-        "year": 2020,
-        "title": "Classification of Brain Tumors from MRI Images Using a Convolutional Neural Network",
-        "journal": "Applied Sciences",
-        "volume": "10(6)",
-        "doi": "10.3390/app10061999"
-      },
-      {
-        "authors": "Deepak, S., Ameer, P.M.",
-        "year": 2019,
-        "title": "Brain Tumor Classification Using Deep CNN Features via Transfer Learning",
-        "journal": "Computers in Biology and Medicine",
-        "volume": "111",
-        "doi": "10.1016/j.compbiomed.2019.103345"
-      }
-    ]
-  },
   "pneumonia": {
     "dataset_paper": {
       "authors": "Kermany, D.S., Goldbaum, M., Cai, W., et al.",

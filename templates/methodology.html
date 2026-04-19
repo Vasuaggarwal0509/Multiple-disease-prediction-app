@@ -10,134 +10,102 @@
         </ol>
     </nav>
 
-    <h1 class="fw-bold mb-2">Research Methodology</h1>
+    <h1 class="fw-bold mb-2">Inference Methodology</h1>
     <p class="lead text-muted mb-4">
-        Evaluation framework, model architectures, and dataset descriptions.
+        Each disease is handled by a dedicated model trained on its specialized dataset. This page documents the architecture and inference pipeline for every model in the system.
     </p>
 
-    <!-- Evaluation Protocol -->
+    <!-- Image Models -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0"><i class="bi bi-gear"></i> Evaluation Protocol</h5>
+            <h5 class="mb-0"><i class="bi bi-image"></i> Image-Based Disease Models</h5>
         </div>
         <div class="card-body">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <h6 class="fw-bold">Image Classification Tasks</h6>
-                    <ul class="method-list">
-                        <li><strong>Models:</strong> ResNet-50, VGG-16, MobileNet V3 (all pretrained on ImageNet)</li>
-                        <li><strong>Training:</strong> Transfer learning with fine-tuning on disease-specific datasets</li>
-                        <li><strong>Input Size:</strong> 224 x 224 x 3 (RGB)</li>
-                        <li><strong>Data Split:</strong> Train / Validation / Test (as provided by dataset or 80/10/10)</li>
-                        <li><strong>Optimizer:</strong> Adam with learning rate scheduling</li>
-                        <li><strong>Loss:</strong> Categorical cross-entropy (multi-class) / Binary cross-entropy (binary)</li>
-                        <li><strong>Augmentation:</strong> Random rotation, flip, zoom, brightness adjustment</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h6 class="fw-bold">Tabular Classification Tasks</h6>
-                    <ul class="method-list">
-                        <li><strong>Model:</strong> Support Vector Machine (linear kernel)</li>
-                        <li><strong>Preprocessing:</strong> StandardScaler normalization</li>
-                        <li><strong>Data Split:</strong> 80% train / 20% test (stratified)</li>
-                        <li><strong>Validation:</strong> Single train/test split (small dataset sizes)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+            <p class="text-muted">Each image model receives a raw upload, applies architecture-specific preprocessing, and returns a single prediction with per-class probabilities.</p>
 
-    <!-- Metrics Definitions -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="bi bi-rulers"></i> Metrics Definitions</h5>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>Accuracy</h6>
-                        <p class="small text-muted">Proportion of correct predictions over total predictions. Can be misleading on imbalanced datasets.</p>
-                        <code>TP + TN / (TP + TN + FP + FN)</code>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>Precision</h6>
-                        <p class="small text-muted">Of all positive predictions, how many were correct. High precision = few false alarms.</p>
-                        <code>TP / (TP + FP)</code>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>Recall (Sensitivity)</h6>
-                        <p class="small text-muted">Of all actual positives, how many were detected. Critical in medical diagnosis.</p>
-                        <code>TP / (TP + FN)</code>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>F1 Score</h6>
-                        <p class="small text-muted">Harmonic mean of precision and recall. Balances both concerns.</p>
-                        <code>2 * (P * R) / (P + R)</code>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>AUC-ROC</h6>
-                        <p class="small text-muted">Area Under the Receiver Operating Characteristic Curve. Threshold-independent measure of discriminative ability.</p>
-                        <code>Area under TPR vs FPR curve</code>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="metric-def-card">
-                        <h6>Confusion Matrix</h6>
-                        <p class="small text-muted">Table showing TP, TN, FP, FN counts. Reveals specific failure modes of each model.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CNN Architectures -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="bi bi-cpu"></i> CNN Architectures Compared</h5>
-        </div>
-        <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th>Disease</th>
                             <th>Architecture</th>
-                            <th>Year</th>
-                            <th>Parameters</th>
-                            <th>ImageNet Top-5</th>
-                            <th>Key Innovation</th>
+                            <th>Input Size</th>
+                            <th>Preprocessing</th>
+                            <th>Output</th>
+                            <th>Classes</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="fw-semibold">VGG-16</td>
-                            <td>2014</td>
-                            <td>138M</td>
-                            <td>92.7%</td>
-                            <td>Deep stacked 3x3 convolutions; simple and uniform architecture</td>
+                            <td class="fw-semibold">Eye Disease (OCT)</td>
+                            <td>MobileNet V3 (fine-tuned)</td>
+                            <td>224 x 224 x 3</td>
+                            <td>MobileNet V3 <code>preprocess_input</code> ([-1, 1] scaling)</td>
+                            <td>Softmax (4-way)</td>
+                            <td>CNV, DME, DRUSEN, NORMAL</td>
                         </tr>
                         <tr>
-                            <td class="fw-semibold">ResNet-50</td>
-                            <td>2015</td>
-                            <td>25.6M</td>
-                            <td>93.3%</td>
-                            <td>Residual (skip) connections enabling training of much deeper networks</td>
+                            <td class="fw-semibold">Pneumonia (X-Ray)</td>
+                            <td>Custom CNN (5 Conv+Pool blocks)</td>
+                            <td>300 x 300 x 3</td>
+                            <td>Rescale by 1/255</td>
+                            <td>Sigmoid (binary)</td>
+                            <td>Normal, Pneumonia</td>
                         </tr>
                         <tr>
-                            <td class="fw-semibold">MobileNet V3</td>
-                            <td>2019</td>
-                            <td>5.4M</td>
-                            <td>92.6%</td>
-                            <td>Neural Architecture Search + squeeze-and-excitation; optimized for mobile</td>
+                            <td class="fw-semibold">Malaria (Cell)</td>
+                            <td>Custom CNN (5 Conv+Pool blocks)</td>
+                            <td>130 x 130 x 3</td>
+                            <td>Rescale by 1/255</td>
+                            <td>Sigmoid (binary)</td>
+                            <td>Parasitized, Uninfected</td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h6 class="fw-bold mt-4">Inference Pipeline</h6>
+            <ol class="method-list">
+                <li>User uploads an image via the browser interface.</li>
+                <li>Image is converted to RGB and resized to the target input dimensions for the specific model.</li>
+                <li>Architecture-specific preprocessing is applied (either <code>preprocess_input</code> or simple 1/255 rescaling).</li>
+                <li>The preprocessed tensor is passed to the trained model for inference.</li>
+                <li>Output probabilities are returned alongside the predicted class label and confidence score.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Tabular Models -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-table"></i> Tabular Clinical Data Models</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Clinical feature values are passed to trained Support Vector Machine classifiers. All tabular models use linear kernel SVM with StandardScaler preprocessing applied during training.</p>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Disease</th>
+                            <th>Algorithm</th>
+                            <th>Features</th>
+                            <th>Samples</th>
+                            <th>Classes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, disease in diseases.items() %}
+                        {% if disease.type == 'tabular' %}
+                        <tr>
+                            <td class="fw-semibold">{{ disease.name }}</td>
+                            <td>SVM (linear kernel)</td>
+                            <td>{{ disease.features|length }}</td>
+                            <td>{{ disease.dataset.samples }}</td>
+                            <td>{{ disease.dataset.classes | join(', ') }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -157,7 +125,6 @@
                             <th>Disease</th>
                             <th>Dataset</th>
                             <th>Samples</th>
-                            <th>Classes</th>
                             <th>Type</th>
                             <th>Source</th>
                         </tr>
@@ -168,7 +135,6 @@
                             <td class="fw-semibold">{{ disease.name }}</td>
                             <td>{{ disease.dataset.name }}</td>
                             <td>{{ "{:,}".format(disease.dataset.samples) }}</td>
-                            <td>{{ disease.dataset.classes|length }}</td>
                             <td>
                                 {% if disease.type == 'image' %}
                                 <span class="badge bg-info">Image</span>
@@ -188,11 +154,12 @@
     <!-- References -->
     <div class="card mb-4">
         <div class="card-header">
-            <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Complete Bibliography</h5>
+            <h5 class="mb-0"><i class="bi bi-journal-bookmark"></i> Bibliography</h5>
         </div>
         <div class="card-body">
             {% for disease_key, refs in references.items() %}
-            <h6 class="fw-bold mt-3 text-primary">{{ diseases[disease_key].name if disease_key in diseases else disease_key }}</h6>
+            {% if disease_key in diseases %}
+            <h6 class="fw-bold mt-3 text-primary">{{ diseases[disease_key].name }}</h6>
             {% if refs.dataset_paper is defined %}
             <div class="reference-item">
                 <span class="badge bg-dark me-1">Dataset</span>
@@ -203,19 +170,6 @@
                 DOI: <a href="https://doi.org/{{ refs.dataset_paper.doi }}" target="_blank">{{ refs.dataset_paper.doi }}</a>
                 {% endif %}
             </div>
-            {% endif %}
-            {% if refs.model_papers is defined %}
-            {% for paper in refs.model_papers %}
-            <div class="reference-item">
-                <span class="badge bg-primary me-1">{{ paper.model }}</span>
-                {{ paper.authors }} ({{ paper.year }}).
-                <em>{{ paper.title }}</em>.
-                {{ paper.journal }}.
-                {% if paper.doi %}
-                DOI: <a href="https://doi.org/{{ paper.doi }}" target="_blank">{{ paper.doi }}</a>
-                {% endif %}
-            </div>
-            {% endfor %}
             {% endif %}
             {% if refs.related_papers is defined %}
             {% for paper in refs.related_papers %}
@@ -230,23 +184,8 @@
             </div>
             {% endfor %}
             {% endif %}
+            {% endif %}
             {% endfor %}
-        </div>
-    </div>
-
-    <!-- Limitations -->
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Limitations</h5>
-        </div>
-        <div class="card-body">
-            <ul class="method-list">
-                <li>Tabular datasets are small (195-768 samples), leading to high variance in metrics.</li>
-                <li>No external validation on independent hospital datasets.</li>
-                <li>Transfer learning performance depends on similarity between ImageNet and medical domains.</li>
-                <li>Class imbalance in some datasets (e.g., Pneumonia) may bias results toward majority class.</li>
-                <li>Models trained on specific imaging equipment/protocols may not generalize to other clinical settings.</li>
-            </ul>
         </div>
     </div>
 </div>

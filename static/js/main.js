@@ -1,14 +1,11 @@
-// ============================================
 // Disease Prediction System - Main JS
-// ============================================
 
 document.addEventListener('DOMContentLoaded', function () {
     setupImageUpload();
     setupTabularForm();
 });
 
-// --- Image Upload & Prediction ---
-
+// ─── Image Upload & Prediction ───
 function setupImageUpload() {
     const uploadZone = document.getElementById('uploadZone');
     const imageInput = document.getElementById('imageInput');
@@ -20,19 +17,13 @@ function setupImageUpload() {
 
     if (!uploadZone) return;
 
-    // Click to browse
     uploadZone.addEventListener('click', () => imageInput.click());
 
-    // Drag & drop
     uploadZone.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadZone.classList.add('dragover');
     });
-
-    uploadZone.addEventListener('dragleave', () => {
-        uploadZone.classList.remove('dragover');
-    });
-
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
     uploadZone.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadZone.classList.remove('dragover');
@@ -42,14 +33,10 @@ function setupImageUpload() {
         }
     });
 
-    // File selected
     imageInput.addEventListener('change', () => {
-        if (imageInput.files.length) {
-            showPreview(imageInput.files[0]);
-        }
+        if (imageInput.files.length) showPreview(imageInput.files[0]);
     });
 
-    // Clear image
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
             imageInput.value = '';
@@ -61,7 +48,6 @@ function setupImageUpload() {
         });
     }
 
-    // Form submit
     if (imageForm) {
         imageForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -92,92 +78,67 @@ async function runImagePrediction() {
 
     if (!imageInput.files.length) return;
 
-    // Show loading
     loading.style.display = 'block';
     results.style.display = 'none';
     placeholder.style.display = 'none';
 
     const formData = new FormData();
-    formData.append('disease_key', diseaseKey);
     formData.append('image', imageInput.files[0]);
 
     try {
-        const response = await fetch('/predict/image', {
-            method: 'POST',
-            body: formData,
-        });
-
+        const response = await fetch(`/predict/image/${diseaseKey}`, { method: 'POST', body: formData });
         const data = await response.json();
 
         if (data.error) {
-            grid.innerHTML = `<div class="col-12"><div class="alert alert-danger">${data.error}</div></div>`;
+            grid.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
         } else {
-            renderImageResults(grid, data.results);
+            renderSingleResult(grid, data);
         }
 
         loading.style.display = 'none';
         results.style.display = 'block';
     } catch (err) {
         loading.style.display = 'none';
-        grid.innerHTML = `<div class="col-12"><div class="alert alert-danger">Error: ${err.message}</div></div>`;
+        grid.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
         results.style.display = 'block';
     }
 }
 
-function renderImageResults(container, results) {
-    container.innerHTML = '';
-
-    results.forEach((result) => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4';
-
-        if (!result.available) {
-            col.innerHTML = `
-                <div class="model-result-card unavailable">
-                    <div class="model-name">${result.model_name}</div>
-                    <p class="text-muted small mt-2">Model not downloaded yet</p>
-                    <p class="small">Run <code>python scripts/download_models.py</code></p>
-                </div>`;
-        } else {
-            let probBars = '';
-            if (result.probabilities) {
-                Object.entries(result.probabilities).forEach(([cls, prob]) => {
-                    const pct = (prob * 100).toFixed(1);
-                    const isTop = cls === result.label;
-                    probBars += `
-                        <div class="prob-row">
-                            <span class="prob-label">${cls}</span>
-                            <div class="prob-bar-bg">
-                                <div class="prob-bar-fill" style="width: ${pct}%; ${isTop ? 'background: var(--success)' : ''}"></div>
-                            </div>
-                            <span class="prob-value">${pct}%</span>
-                        </div>`;
-                });
-            }
-
-            col.innerHTML = `
-                <div class="model-result-card">
-                    <div class="model-name">${result.model_name}</div>
-                    <div class="prediction-label">${result.label}</div>
-                    <div class="mb-2">
-                        <small class="text-muted">Confidence</small>
-                        <div class="confidence-bar">
-                            <div class="confidence-fill" style="width: ${(result.confidence * 100).toFixed(1)}%"></div>
-                        </div>
-                        <small class="fw-bold">${(result.confidence * 100).toFixed(1)}%</small>
+function renderSingleResult(container, data) {
+    let probBars = '';
+    if (data.probabilities) {
+        Object.entries(data.probabilities).forEach(([cls, prob]) => {
+            const pct = (prob * 100).toFixed(1);
+            const isTop = cls === data.label;
+            probBars += `
+                <div class="prob-row">
+                    <span class="prob-label">${cls}</span>
+                    <div class="prob-bar-bg">
+                        <div class="prob-bar-fill" style="width: ${pct}%; ${isTop ? 'background: var(--success)' : ''}"></div>
                     </div>
-                    <hr>
-                    <small class="text-muted fw-semibold">Class Probabilities</small>
-                    <div class="mt-1">${probBars}</div>
+                    <span class="prob-value">${pct}%</span>
                 </div>`;
-        }
+        });
+    }
 
-        container.appendChild(col);
-    });
+    container.innerHTML = `
+        <div class="model-result-card">
+            <div class="model-name">${data.model_name}</div>
+            <div class="prediction-label">${data.label}</div>
+            <div class="mb-2">
+                <small class="text-muted">Confidence</small>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: ${(data.confidence * 100).toFixed(1)}%"></div>
+                </div>
+                <small class="fw-bold">${(data.confidence * 100).toFixed(1)}%</small>
+            </div>
+            <hr>
+            <small class="text-muted fw-semibold">Class Probabilities</small>
+            <div class="mt-1">${probBars}</div>
+        </div>`;
 }
 
-// --- Tabular Prediction ---
-
+// ─── Tabular Prediction ───
 function setupTabularForm() {
     const form = document.getElementById('tabularForm');
     if (!form) return;

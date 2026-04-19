@@ -54,3 +54,5 @@ instance/
 
 # Zip files
 *.zip
+
+*.docx

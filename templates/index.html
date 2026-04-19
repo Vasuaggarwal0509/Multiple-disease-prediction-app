@@ -7,14 +7,15 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7">
-                <h1 class="display-4 fw-bold mb-3">Multi-Disease Prediction <br>&amp; Model Comparison</h1>
+                <h1 class="display-4 fw-bold mb-3">Multi-Disease<br>Prediction System</h1>
                 <p class="lead mb-4">
-                    A research platform comparing deep learning architectures (ResNet-50, VGG-16, MobileNet V3)
-                    across multiple medical imaging tasks, alongside classical ML models for clinical data prediction.
+                    AI-powered diagnostic platform providing instant predictions for six medical conditions.
+                    Each disease uses a dedicated model trained on its specialized dataset — from OCT retinal scans
+                    and chest X-rays to clinical biomarkers.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="/comparison" class="btn btn-primary btn-lg">
-                        <i class="bi bi-bar-chart"></i> View Comparisons
+                    <a href="#diseases" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-down-circle"></i> Explore Diseases
                     </a>
                     <a href="/methodology" class="btn btn-outline-light btn-lg">
                         <i class="bi bi-journal-text"></i> Methodology
@@ -26,26 +27,26 @@
                     <div class="row g-3">
                         <div class="col-6">
                             <div class="stat-card">
-                                <div class="stat-number">7</div>
+                                <div class="stat-number">6</div>
                                 <div class="stat-label">Diseases</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="stat-card">
-                                <div class="stat-number">15</div>
-                                <div class="stat-label">Models</div>
+                                <div class="stat-number">6</div>
+                                <div class="stat-label">Trained Models</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="stat-card">
-                                <div class="stat-number">125K+</div>
-                                <div class="stat-label">Images</div>
+                                <div class="stat-number">117K+</div>
+                                <div class="stat-label">Training Images</div>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="stat-card">
-                                <div class="stat-number">3</div>
-                                <div class="stat-label">CNN Architectures</div>
+                                <div class="stat-number">2</div>
+                                <div class="stat-label">Modalities</div>
                             </div>
                         </div>
                     </div>
@@ -56,24 +57,22 @@
 </section>
 
 <!-- Disease Cards -->
-<section class="py-5">
+<section class="py-5" id="diseases">
     <div class="container">
         <!-- Image-Based Diseases -->
-        <h2 class="section-title mb-4">
-            <i class="bi bi-image"></i> Image-Based Disease Classification
+        <h2 class="section-title mb-3">
+            <i class="bi bi-image"></i> Medical Image Classification
         </h2>
-        <p class="text-muted mb-4">Deep learning models (ResNet-50, VGG-16, MobileNet V3) compared on medical imaging datasets.</p>
+        <p class="text-muted mb-4">Upload a medical image to receive an instant diagnosis from a model trained specifically for that condition.</p>
         <div class="row g-4 mb-5">
             {% for key, disease in diseases.items() %}
             {% if disease.type == 'image' %}
-            <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-4">
                 <div class="card disease-card h-100">
                     <div class="card-body">
                         <div class="disease-icon mb-3">
                             {% if key == 'eye_disease' %}
                             <i class="bi bi-eye"></i>
-                            {% elif key == 'brain_tumor' %}
-                            <i class="bi bi-virus"></i>
                             {% elif key == 'pneumonia' %}
                             <i class="bi bi-lungs"></i>
                             {% elif key == 'malaria' %}
@@ -81,7 +80,7 @@
                             {% endif %}
                         </div>
                         <h5 class="card-title">{{ disease.name }}</h5>
-                        <p class="card-text small text-muted">{{ disease.description[:100] }}...</p>
+                        <p class="card-text small text-muted">{{ disease.description[:120] }}...</p>
                         <div class="d-flex flex-wrap gap-1 mb-3">
                             {% for cls in disease.dataset.classes %}
                             <span class="badge bg-secondary">{{ cls }}</span>
@@ -93,8 +92,8 @@
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="/disease/{{ key }}" class="btn btn-sm btn-outline-primary w-100">
-                            <i class="bi bi-arrow-right"></i> Explore &amp; Compare
+                        <a href="/disease/{{ key }}" class="btn btn-sm btn-primary w-100">
+                            <i class="bi bi-cloud-arrow-up"></i> Upload &amp; Predict
                         </a>
                     </div>
                 </div>
@@ -104,10 +103,10 @@
         </div>
 
         <!-- Tabular Diseases -->
-        <h2 class="section-title mb-4">
+        <h2 class="section-title mb-3">
             <i class="bi bi-table"></i> Clinical Data Prediction
         </h2>
-        <p class="text-muted mb-4">SVM models for structured clinical data classification.</p>
+        <p class="text-muted mb-4">Enter patient biomarker values to receive a prediction from a model trained on clinical datasets.</p>
         <div class="row g-4">
             {% for key, disease in diseases.items() %}
             {% if disease.type == 'tabular' %}
@@ -124,14 +123,14 @@
                             {% endif %}
                         </div>
                         <h5 class="card-title">{{ disease.name }}</h5>
-                        <p class="card-text small text-muted">{{ disease.description[:100] }}...</p>
+                        <p class="card-text small text-muted">{{ disease.description[:120] }}...</p>
                         <div class="small text-muted mb-3">
                             <i class="bi bi-database"></i> {{ disease.dataset.samples }} samples
                             &bull; {{ disease.dataset.features }} features
                         </div>
                     </div>
                     <div class="card-footer bg-transparent">
-                        <a href="/disease/{{ key }}" class="btn btn-sm btn-outline-primary w-100">
+                        <a href="/disease/{{ key }}" class="btn btn-sm btn-primary w-100">
                             <i class="bi bi-arrow-right"></i> Predict
                         </a>
                     </div>

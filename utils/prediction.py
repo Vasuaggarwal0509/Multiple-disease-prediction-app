@@ -1,18 +1,55 @@
 import logging
-import numpy as np
-from utils.model_loader import load_model, get_disease_config
-from utils.preprocessing import preprocess_image
+import os
+import pickle
+import json
 
 log = logging.getLogger(__name__)
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+CONFIG_DIR = os.path.join(BASE_DIR, "config")
+
+_svm_cache = {}
+
+
+def _get_disease_config(disease_key):
+    try:
+        with open(os.path.join(CONFIG_DIR, "diseases.json")) as f:
+            return json.load(f)["diseases"].get(disease_key)
+    except Exception as e:
+        log.error(f"Failed to load disease config: {e}")
+        return None
+
+
+def _load_svm(disease_key):
+    if disease_key in _svm_cache:
+        return _svm_cache[disease_key]
+    config = _get_disease_config(disease_key)
+    if not config:
+        return None
+    model_rel_path = config.get("models", {}).get("svm", {}).get("file")
+    if not model_rel_path:
+        return None
+    path = os.path.join(BASE_DIR, model_rel_path)
+    if not os.path.exists(path):
+        log.warning(f"SVM model not found: {path}")
+        return None
+    try:
+        with open(path, "rb") as f:
+            model = pickle.load(f)
+        _svm_cache[disease_key] = model
+        return model
+    except Exception as e:
+        log.error(f"Failed to load SVM model {path}: {e}")
+        return None
 
 
 def predict_tabular(disease_key, input_values):
     """Run prediction on tabular data using the SVM model."""
-    model = load_model(disease_key, "svm")
+    model = _load_svm(disease_key)
     if model is None:
         return {"error": "Model not found or failed to load"}
 
-    config = get_disease_config(disease_key)
+    config = _get_disease_config(disease_key)
     if not config:
         return {"error": "Disease not configured"}
 
@@ -39,54 +76,3 @@ def predict_tabular(disease_key, input_values):
         "label": classes[pred_class] if pred_class < len(classes) else f"Class {pred_class}",
         "model": "Support Vector Machine",
     }
-
-
-def predict_image_all_models(disease_key, image_file):
-    """Run prediction on an image using all available models for a disease."""
-    config = get_disease_config(disease_key)
-    if not config:
-        return [{"error": "Disease not configured"}]
-
-    classes = config["dataset"]["classes"]
-    results = []
-
-    for model_key, model_config in config["models"].items():
-        model = load_model(disease_key, model_key)
-        if model is None:
-            results.append({
-                "model_key": model_key,
-                "model_name": model_config["name"],
-                "available": False,
-                "error": "Model not found or failed to load",
-            })
-            continue
-
-        try:
-            preprocess_type = model_config.get("preprocess", "mobilenet_v3")
-            image_file.seek(0)
-            img = preprocess_image(image_file, preprocess_type)
-
-            preds = model.predict(img, verbose=0)
-            pred_class = int(np.argmax(preds[0]))
-            confidence = float(np.max(preds[0]))
-            probabilities = {classes[i]: float(preds[0][i]) for i in range(len(classes))}
-
-            results.append({
-                "model_key": model_key,
-                "model_name": model_config["name"],
-                "available": True,
-                "prediction": pred_class,
-                "label": classes[pred_class] if pred_class < len(classes) else f"Class {pred_class}",
-                "confidence": confidence,
-                "probabilities": probabilities,
-            })
-        except Exception as e:
-            log.error(f"Image prediction failed for {model_key}: {e}")
-            results.append({
-                "model_key": model_key,
-                "model_name": model_config["name"],
-                "available": True,
-                "error": str(e),
-            })
-
-    return results

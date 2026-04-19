@@ -1,45 +1,49 @@
-# Multi-Disease Prediction System - Quick Overview
+# Multi-Disease Prediction System — Quick Overview
 
-A web app that predicts 7 diseases using Machine Learning. It compares 3 deep learning models (ResNet-50, VGG-16, MobileNet V3) on medical images and uses SVM for clinical data.
+A web app that predicts 6 diseases using AI. Three use clinical numeric data (SVM models), three use medical images (CNN models).
 
 ---
 
-## What Does This Project Do?
+## What It Does
 
-You upload a medical image (X-ray, MRI, OCT scan, or cell image) and the app runs **3 different AI models** on it simultaneously, showing you which disease it detects and how confident each model is. It also has a **comparison dashboard** showing which model performs best.
+- **Upload a medical image** (OCT scan, chest X-ray, or blood cell image) → get a diagnosis
+- **Enter patient values** (glucose, cholesterol, voice metrics) → get a risk assessment
+- Clean Flask web UI with drag-and-drop uploads
+- Reproducible evaluation harness + auto-generated plots for every model
 
-For clinical data (diabetes, heart disease, Parkinson's), you enter patient values and get an instant prediction.
+Each disease has **one dedicated trained model**. No comparisons, no model picker — just predict.
 
 ---
 
 ## Diseases Covered
 
-### Image-Based (3 AI models each)
+### Image-Based (3 CNN Models)
 
-| Disease | Input | Classes | Dataset Size |
-|---------|-------|---------|-------------|
-| Eye Disease | OCT retinal scan | CNV, DME, DRUSEN, Normal | 84,495 images |
-| Brain Tumor | MRI scan | Glioma, Meningioma, Pituitary, No Tumor | 7,023 images |
-| Pneumonia | Chest X-ray | Normal, Pneumonia | 5,863 images |
-| Malaria | Blood cell image | Parasitized, Uninfected | 27,558 images |
+| Disease | Input | Classes | Model |
+|---------|-------|---------|-------|
+| Eye Disease | OCT retinal scan | CNV, DME, DRUSEN, NORMAL | MobileNet V3 (fine-tuned) |
+| Pneumonia | Chest X-ray | Normal, Pneumonia | Custom CNN |
+| Malaria | Blood cell image | Parasitized, Uninfected | Custom CNN |
 
-### Clinical Data (SVM model)
+### Clinical Data (3 SVM Models)
 
-| Disease | Input | Accuracy |
-|---------|-------|----------|
-| Diabetes | 8 medical values (glucose, BMI, age, etc.) | 77% |
-| Heart Disease | 13 cardiac values (cholesterol, BP, etc.) | 87% |
-| Parkinson's | 22 voice measurements | 87% |
+| Disease | Input | Classes |
+|---------|-------|---------|
+| Diabetes | 8 clinical values (glucose, BMI, age, etc.) | Not Diabetic / Diabetic |
+| Heart Disease | 13 cardiac values (cholesterol, BP, etc.) | No Heart Disease / Heart Disease |
+| Parkinson's Disease | 22 voice measurements | Healthy / Parkinson's |
 
 ---
 
 ## How to Run
 
 ```bash
-# 1. Install
+# 1. Install dependencies
 pip install -r requirements.txt
+# or
+uv pip install -r requirements.txt
 
-# 2. Run
+# 2. Start the server
 python server.py
 
 # 3. Open browser
@@ -48,88 +52,106 @@ python server.py
 
 ---
 
-## Download Links
+## Measured Results (on held-out test images)
 
-### Datasets (from Kaggle)
+| Disease | Model | Accuracy |
+|---------|-------|:--------:|
+| Retinal Disease (OCT) | MobileNet V3 | 90.00% |
+| Pneumonia (Chest X-Ray) | Custom CNN | 97.50% |
+| Malaria (Cell Images) | Custom CNN | 97.50% |
+| Diabetes | SVM (linear) | 77.27% |
+| Heart Disease | SVM (linear) | 86.89% |
+| Parkinson's | SVM (linear) | 87.18% |
 
-| Dataset | Download |
-|---------|----------|
-| Eye Disease (OCT) | https://www.kaggle.com/datasets/paultimothymooney/kermany2018 |
-| Brain Tumor (MRI) | https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset |
-| Pneumonia (X-Ray) | https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia |
-| Malaria (Cell) | https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria |
+---
+
+## Project Layout
+
+```
+ml_models/          <-- All trained model files (download or train yourself)
+  diabetes/svm_model.sav
+  heart/svm_model.sav
+  parkinsons/svm_model.sav
+  eye_disease/trained_model.keras (+ .h5 fallback)
+  pneumonia/trained_model.h5
+  malaria/trained_model.h5
+
+notebooks/          <-- Training code (6 Jupyter notebooks)
+scripts/            <-- evaluate.py, visualize_results.py, generate_report.py
+test_data/          <-- Labelled test images (per disease/class) + ground_truth.csv + plots/
+Datasets/           <-- CSVs used to train the SVM models
+templates/          <-- HTML (Flask Jinja2)
+static/             <-- CSS + JS
+utils/              <-- Python backend modules
+server.py           <-- Flask entry point
+config/diseases.json <-- All disease metadata + model paths
+```
+
+---
+
+## Dataset Download Links
+
+| Dataset | Kaggle |
+|---------|--------|
+| Eye Disease (OCT, 84K images) | https://www.kaggle.com/datasets/paultimothymooney/kermany2018 |
+| Pneumonia (Chest X-Ray) | https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia |
+| Malaria (Cell Images) | https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria |
 | Diabetes | https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database |
 | Heart Disease | https://www.kaggle.com/datasets/ronitf/heart-disease-uci |
 | Parkinson's | https://www.kaggle.com/datasets/vikasukani/parkinsons-disease-data-set |
 
-### Pre-trained Models (Kaggle Notebooks - fork and run to get .keras files)
+---
 
-**Eye Disease**
-- MobileNet V3: https://www.kaggle.com/code/arnavjain1/oct-retinal-disease-mobilenetv3
-- ResNet-50: https://www.kaggle.com/code/bjoernjostein/oct-retinal-disease-classification-resnet50
-- VGG-16: https://www.kaggle.com/code/arifmia/retinal-disease-classification-vgg16
+## Evaluate the Models
 
-**Brain Tumor**
-- MobileNet V3: https://www.kaggle.com/code/jaykumar1607/brain-tumor-mri-classification-mobilenet
-- ResNet-50: https://www.kaggle.com/code/ahmedhamada0/brain-tumor-detection-resnet50
-- VGG-16: https://www.kaggle.com/code/ahmedhamada0/brain-tumor-detection-vgg16
+Drop ~20 labelled images per class into `test_data/<disease>/<class>/`, then run:
 
-**Pneumonia**
-- MobileNet V3: https://www.kaggle.com/code/jnegrini/pneumonia-detection-mobilenet
-- ResNet-50: https://www.kaggle.com/code/madz2000/pneumonia-detection-using-resnet50
-- VGG-16: https://www.kaggle.com/code/sanwal092/pneumonia-x-ray-vgg16
+```bash
+# Scan test_data/ → compute metrics → save JSON
+python scripts/evaluate.py
 
-**Malaria**
-- MobileNet V3: https://www.kaggle.com/code/akshat0007/malaria-cell-detection-mobilenet
-- ResNet-50: https://www.kaggle.com/code/fchollet/malaria-detection-resnet50
-- VGG-16: https://www.kaggle.com/code/therealsampat/malaria-detection-vgg16
+# Generate confusion matrices + per-class bar charts
+python scripts/visualize_results.py
 
-### Research Papers
+# Rebuild the formal report.docx with all plots embedded
+python scripts/generate_report.py
+```
 
-| Paper | Link |
-|-------|------|
-| ResNet (He et al., 2016) | https://doi.org/10.1109/CVPR.2016.90 |
-| VGG (Simonyan & Zisserman, 2015) | https://doi.org/10.48550/arXiv.1409.1556 |
-| MobileNet V3 (Howard et al., 2019) | https://doi.org/10.1109/ICCV.2019.00140 |
-| OCT Dataset (Kermany et al., 2018) | https://doi.org/10.1016/j.cell.2018.02.010 |
-| CheXNet - Pneumonia (Rajpurkar et al., 2017) | https://doi.org/10.48550/arXiv.1711.05225 |
-| Malaria Detection (Rajaraman et al., 2018) | https://doi.org/10.7717/peerj.4568 |
-| Brain Tumor CNN (Badza & Barjaktarovic, 2020) | https://doi.org/10.3390/app10061999 |
+Outputs:
+- `test_data/ground_truth.csv` — auto-labelled from folder structure
+- `test_data/evaluation_results.json` — accuracy, precision, recall, F1, AUC-ROC per disease
+- `test_data/plots/*.png` — 11 visualisations (confusion matrices, per-class metrics, summaries)
+
+---
+
+## Training a Model Yourself
+
+1. Open the notebook for your disease (e.g. `notebooks/eye_disease_training.ipynb`)
+2. Upload to Google Colab or Kaggle (GPU recommended for image models)
+3. Download the dataset (link above)
+4. Adjust the paths in the Configuration cell
+5. Run all cells
+6. Download the saved model file
+7. Drop it into the matching folder under `ml_models/<disease>/`
+
+That's it — next time you start the server, the new model loads automatically.
 
 ---
 
 ## Tech Stack
 
-- **Backend:** Python, Flask
-- **Frontend:** HTML, CSS, JavaScript, Bootstrap 5, Chart.js
-- **ML Models:** TensorFlow/Keras (CNNs), scikit-learn (SVM)
-- **CNN Architectures:** ResNet-50, VGG-16, MobileNet V3
+- **Backend:** Python 3.11, Flask
+- **ML:** TensorFlow/Keras (CNN models), scikit-learn (SVM)
+- **Frontend:** HTML/CSS/JavaScript with Bootstrap 5
+- **Data:** Publicly available Kaggle datasets
 
 ---
 
-## Where to Put Downloaded Files
+## Important Notes
 
-```
-models/
-  eye_disease/mobilenet_v3.keras    <-- put .keras files here
-  eye_disease/resnet50.keras
-  eye_disease/vgg16.keras
-  brain_tumor/mobilenet_v3.keras
-  brain_tumor/resnet50.keras
-  brain_tumor/vgg16.keras
-  pneumonia/mobilenet_v3.keras
-  pneumonia/resnet50.keras
-  pneumonia/vgg16.keras
-  malaria/mobilenet_v3.keras
-  malaria/resnet50.keras
-  malaria/vgg16.keras
-
-test_data/
-  eye_disease/                      <-- put sample test images here
-  brain_tumor/
-  pneumonia/
-  malaria/
-```
+- **TensorFlow version:** Pin to 2.14–2.15. Keras 3.x (TF 2.16+) cannot load the eye disease model due to legacy layer-name conventions.
+- **Models are downloadable / reproducible:** If any model is missing, the server logs a clear warning. Train using the notebooks or download from a teammate.
+- **Not for clinical use:** Educational and research purposes only.
 
 ---
 
