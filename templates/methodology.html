@@ -101,7 +101,7 @@
                             <td class="fw-semibold">{{ disease.name }}</td>
                             <td>SVM (linear kernel)</td>
                             <td>{{ disease.features|length }}</td>
-                            <td>{{ disease.dataset.samples }}</td>
+                            <td>{% if disease.dataset.samples is defined %}{{ disease.dataset.samples }}{% else %}—{% endif %}</td>
                             <td>{{ disease.dataset.classes | join(', ') }}</td>
                         </tr>
                         {% endif %}
@@ -134,7 +134,7 @@
                         <tr>
                             <td class="fw-semibold">{{ disease.name }}</td>
                             <td>{{ disease.dataset.name }}</td>
-                            <td>{{ "{:,}".format(disease.dataset.samples) }}</td>
+                            <td>{% if disease.dataset.samples is defined %}{{ "{:,}".format(disease.dataset.samples) }}{% else %}—{% endif %}</td>
                             <td>
                                 {% if disease.type == 'image' %}
                                 <span class="badge bg-info">Image</span>

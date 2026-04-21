@@ -297,8 +297,7 @@
       "dataset": {
         "name": "Kermany OCT Retinal Images",
         "source": "Kaggle (Kermany et al., 2018)",
-        "url": "https://www.kaggle.com/datasets/paultimothymooney/kermany2018",
-        "samples": 84495,
+        "url": "https://www.kaggle.com/datasets/anirudhcv/labeled-optical-coherence-tomography-oct",
         "classes": [
           "CNV",
           "DME",
@@ -333,7 +332,6 @@
         "name": "Chest X-Ray Pneumonia Dataset",
         "source": "Kaggle (Kermany et al., 2018)",
         "url": "https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia",
-        "samples": 5863,
         "classes": [
           "Normal",
           "Pneumonia"
@@ -365,7 +363,6 @@
         "name": "NIH Malaria Cell Images Dataset",
         "source": "Kaggle / NIH",
         "url": "https://www.kaggle.com/datasets/iarunava/cell-images-for-detecting-malaria",
-        "samples": 27558,
         "classes": [
           "Parasitized",
           "Uninfected"

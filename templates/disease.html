@@ -17,7 +17,11 @@
         <p class="lead text-muted">{{ disease.description }}</p>
         <div class="d-flex flex-wrap gap-3 mt-3">
             <span class="badge-info-pill">
+                {% if disease.dataset.samples is defined %}
                 <i class="bi bi-database"></i> {{ "{:,}".format(disease.dataset.samples) }} training samples
+                {% else %}
+                <i class="bi bi-database"></i> {{ disease.dataset.name }}
+                {% endif %}
             </span>
             <span class="badge-info-pill">
                 <i class="bi bi-collection"></i> {{ disease.dataset.classes|length }} classes
@@ -151,7 +155,7 @@
                         <p>
                             <strong>{{ disease.dataset.name }}</strong><br>
                             <a href="{{ disease.dataset.url }}" target="_blank">{{ disease.dataset.url }}</a><br>
-                            <small class="text-muted">{{ "{:,}".format(disease.dataset.samples) }} samples across {{ disease.dataset.classes|length }} classes: {{ disease.dataset.classes | join(', ') }}</small>
+                            <small class="text-muted">{% if disease.dataset.samples is defined %}{{ "{:,}".format(disease.dataset.samples) }} samples across {% endif %}{{ disease.dataset.classes|length }} classes: {{ disease.dataset.classes | join(', ') }}</small>
                         </p>
                     </div>
 
